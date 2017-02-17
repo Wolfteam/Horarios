@@ -8,7 +8,7 @@
 
 		public function getMaterias () {
 			$materias=array();
-	  		$result = $this->link->query("SELECT * FROM materias ORDER BY semestre ASC,Codigo ASC");
+	  		$result = $this->link->query("SELECT * FROM materias ORDER BY semestre ASC,codigo ASC");
 			while ($rows = $result->fetch(PDO::FETCH_ASSOC)) {
 				$materias[]=$rows;
 			}

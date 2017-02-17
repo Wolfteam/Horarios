@@ -9,7 +9,7 @@
 </head>
 <!--quite el hidden debo ponerlo devuelta-->
 <body id="cuerpo" >
-<!-- ================================ Navbar de la pag.================================================== -->
+<!-- ================================ Navbar de la pag.====================================== -->
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -32,9 +32,9 @@
         </div><!--/.nav-collapse -->
     </div>
 </nav>
-<!-- ================================ /Navbar de la pag.================================================== -->
+<!-- ================================ /Navbar de la pag.===================================== -->
   <br><br><br>
-<!-- ================================ Contenido de la pag.================================================== -->
+<!-- ================================ Contenido de la pag.=================================== -->
   
 <div class="container">
 <h2>Edicion de la base de datos</h2>
@@ -95,10 +95,10 @@
         </div>
     </div>
 </div>
-<!-- ================================ /Contenido de la pag.================================================== -->
+<!-- ================================ /Contenido de la pag.================================== -->
 
 
-<!-- ================================ Aulas ADD/CREATE Modal================================================ -->
+<!-- ================================ Aulas ADD/CREATE Modal================================= -->
 <div class="modal fade" id="add_new_aulas_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -132,10 +132,10 @@
         </div>
     </div>
 </div>
-<!-- ================================ Aulas ADD/CREATE Modal================================================ -->
+<!-- ================================ Aulas ADD/CREATE Modal================================= -->
 
 
-<!-- ================================ Aulas Modal UPDATE ================================================== -->
+<!-- ================================ Aulas Modal UPDATE ==================================== -->
 <div class="modal fade" id="update_aulas_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -169,10 +169,10 @@
         </div>
     </div>
 </div>
-<!-- ================================ /Aulas Modal UPDATE ================================================== -->
+<!-- ================================ /Aulas Modal UPDATE =================================== -->
 
 
-<!-- ================================ Materias ADD/CREATE Modal============================================== -->
+<!-- ================================ Materias ADD/CREATE Modal============================== -->
 <div class="modal fade" id="add_new_materias_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -186,8 +186,8 @@
                     <input type="number" id="codigo" placeholder="44514" class="form-control"/>
                 </div>
                 <div class="form-group">
-                    <label for="nombre_materia">Nombre de la materia</label>
-                    <input type="text" id="nombre_materia" placeholder="Sistemas de Control I" class="form-control"/>
+                    <label for="nombre_asignatura">Nombre de la Asignatura</label>
+                    <input type="text" id="nombre_asignatura" placeholder="Sistemas de Control I" class="form-control"/>
                 </div>
                 <div class="form-group">
                     <label for="selector_semestre_materia">Semestre</label>
@@ -207,12 +207,12 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="horas_totales">Horas Academicas</label>
-                    <input type="number" id="horas_totales" placeholder="90" class="form-control"/>
+                    <label for="horas_academicas_totales">Horas Academicas</label>
+                    <input type="number" id="horas_academicas_totales" placeholder="90" class="form-control"/>
                 </div>
                 <div class="form-group">
-                    <label for="horas_semanales">Horas Academicas Semanales</label>
-                    <input type="number" id="horas_semanales" placeholder="5" class="form-control"/>
+                    <label for="horas_academicas_semanales">Horas Academicas Semanales</label>
+                    <input type="number" id="horas_academicas_semanales" placeholder="5" class="form-control"/>
                 </div>
                 <div class="form-group">
                     <label for="selector_id_tipo_materia">Tipo de materia</label>
@@ -239,10 +239,10 @@
         </div>
     </div>
 </div>
-<!-- ================================ Materias ADD/CREATE Modal============================================== -->
+<!-- ================================ Materias ADD/CREATE Modal============================== -->
 
 
-<!-- ================================ Materias Modal UPDATE ================================================ -->
+<!-- ================================ Materias Modal UPDATE ================================= -->
 <div class="modal fade" id="update_materias_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -252,8 +252,12 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="update_nombre_materia">Nombre de la materia</label>
-                    <input type="text" id="update_nombre_materia" placeholder="Lab. Electronica I" class="form-control"/>
+                    <label for="update_codigo">Codigo</label>
+                    <input type="number" id="update_codigo" placeholder="44514" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="update_nombre_asignatura">Nombre de la materia</label>
+                    <input type="text" id="update_nombre_asignatura" placeholder="Lab. Electronica I" class="form-control"/>
                 </div>
                 <div class="form-group">
                     <label for="selector_update_semestre_materia">Semestre</label>
@@ -274,14 +278,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="update_horas_totales">Horas Academicas</label>
-                    <input type="number" id="update_horas_totales" placeholder="90" class="form-control"/>
+                    <label for="update_horas_academicas_totales">Horas Academicas</label>
+                    <input type="number" id="update_horas_academicas_totales" placeholder="90" class="form-control"/>
                 </div>
                 <div class="form-group">
-                    <label for="update_horas_semanales">Horas Academicas Semanales</label>
-                    <input type="number" id="update_horas_semanales" placeholder="5" class="form-control"/>
+                    <label for="update_horas_academicas_semanales">Horas Academicas Semanales</label>
+                    <input type="number" id="update_horas_academicas_semanales" placeholder="5" class="form-control"/>
                 </div>
-<!--nito ver si dejare los lab como tipo 1 o los cambiare-->
                 <div class="form-group">
                     <label for="selector_update_id_tipo_materia">Tipo de materia</label>
                     <select class="form-control" id="selector_update_id_tipo_materia">
@@ -300,16 +303,16 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="updateMateriasDetails()">Guardar cambios</button>
+                <button type="button" class="btn btn-primary" onclick="update()">Guardar cambios</button>
                 <input type="hidden" id="hidden_materia_codigo">
             </div>
         </div>
     </div>
 </div>
-<!-- ================================ /Materias Modal UPDATE ================================================ -->
+<!-- ================================ /Materias Modal UPDATE ================================ -->
 
 
-<!-- ================================ Profesores ADD/CREATE Modal============================================ -->
+<!-- ================================ Profesores ADD/CREATE Modal============================ -->
 <div class="modal fade" id="add_new_profesores_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -345,9 +348,9 @@
         </div>
     </div>
 </div>
-<!-- ================================ Profesores ADD/CREATE Modal============================================ -->
+<!-- ================================ Profesores ADD/CREATE Modal============================= -->
 
-<!-- ================================ Profesores Modal UPDATE ============================================== -->
+<!-- ================================ Profesores Modal UPDATE ================================ -->
 <div class="modal fade" id="update_profesores_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -384,10 +387,10 @@
         </div>
     </div>
 </div>
-<!-- ================================ /Profesores Modal UPDATE ============================================== -->
+<!-- ================================ /Profesores Modal UPDATE ================================ -->
 
 
-<!-- ============================= Profesores_Materias ADD/CREATE Modal====================================== -->
+<!-- ============================= Profesores_Materias ADD/CREATE Modal======================== -->
 <div class="modal fade" id="add_new_profesores_materias_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -418,9 +421,9 @@
         </div>
     </div>
 </div>
-<!-- ============================ /Profesores_Materias ADD/CREATE Modal====================================== -->
+<!-- ============================ /Profesores_Materias ADD/CREATE Modal======================== -->
 
-<!-- ================================ Profesores_Materias Modal UPDATE ======================================= -->
+<!-- ================================ Profesores_Materias Modal UPDATE ======================== -->
 <div class="modal fade" id="update_profesores_materias_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -454,12 +457,12 @@
         </div>
     </div>
 </div>
-<!-- ================================ /Profesores Modal UPDATE ============================================== -->
+<!-- ================================ /Profesores Modal UPDATE ================================= -->
 
 
 
 
-<!-- ================================ Javascript de la pag.================================================== -->
+<!-- ================================ Javascript de la pag.===================================== -->
     <script type="text/javascript" src="../js/jquery.min.js"></script>
     <script type="text/javascript" src="../js/bootstrap.min.js"></script>
     <script type="text/javascript" src="edit_db.js"></script>

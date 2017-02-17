@@ -63,6 +63,20 @@
 					    $object->createAulas($nombreAula,$capacidad,$idTipo);
 					}
 					break;
+				case '2'://Crear Materias
+					if (isset($_POST['codigo']) && isset($_POST['asignatura']) && isset($_POST['semestre']) && isset($_POST['horas_academicas_totales']) && isset($_POST['horas_academicas_semanales']) && isset($_POST['id_tipo']) && isset($_POST['id_carrera'])) {
+
+						$codigo = $_POST['codigo'];
+					    $nombreMateria = $_POST['asignatura'];
+					    $semestre = $_POST['semestre'];
+					    $horasAcademicasTotales = $_POST['horas_academicas_totales'];
+					    $horasAcademicasSemanales = $_POST['horas_academicas_semanales'];
+					 	$idTipo = $_POST['id_tipo'];
+					 	$idCarrera = $_POST['id_carrera'];
+					    $object = new MateriasModel($link);
+					    $object->createMaterias($codigo,$nombreMateria,$semestre,$horasAcademicasTotales,$horasAcademicasSemanales,$idTipo,$idCarrera);
+					}
+					break;
 				
 				default:
 					# code...
@@ -109,8 +123,8 @@
 								<td>".$key['horas_academicas_semanales']."</td>
 								<td>".$key['id_tipo']."</td>
 								<td>".$key['id_carrera']."</td>
-								<td> <button onclick='getMateriasDetails(".$key['codigo'].")' class='btn btn-warning'>Editar</button> </td>
-								<td> <button onclick='deleteMaterias(".$key['codigo'].")' class='btn btn-danger'>Borrar</button> </td>
+								<td> <button onclick='getDetails(".$key['codigo'].")' class='btn btn-warning'>Editar</button> </td>
+								<td> <button onclick='deleteStuff(".$key['codigo'].")' class='btn btn-danger'>Borrar</button> </td>
 								</tr>";
 						}
 					}else {
@@ -186,6 +200,21 @@
 
 					}
 					break;
+				case '2':
+					if (isset($_POST['codigo']) && isset($_POST['asignatura']) && isset($_POST['semestre']) && isset($_POST['horas_academicas_totales']) && isset($_POST['horas_academicas_semanales']) && isset($_POST['id_tipo']) && isset($_POST['id_carrera'])) {	
+
+						$codigo = $_POST['codigo'];
+					    $asignatura = $_POST['asignatura'];
+					    $semestre = $_POST['semestre'];
+					    $horasAcademicasTotales = $_POST['horas_academicas_totales'];
+					    $horasAcademicasSemanales = $_POST['horas_academicas_semanales'];
+					 	$idTipo = $_POST['id_tipo'];
+					 	$idCarrera = $_POST['id_carrera'];
+					    $obj = new MateriasModel($link);			 
+					    $obj->setMaterias($codigo,$asignatura,$semestre,$horasAcademicasTotales,
+					    	$horasAcademicasSemanales,$idTipo,$idCarrera);
+					}
+					break;
 				
 				default:
 					# code...
@@ -202,7 +231,13 @@
 					    $object->deleteAulas($idAula);
 					}
 					break;
-				
+				case '2':
+					if (isset($_POST['codigo']) && isset($_POST['codigo']) != "") {
+					    $codigo = $_POST['codigo'];
+					    $object = new MateriasModel($link);
+					    $object->deleteMaterias($codigo);
+					}
+					break;
 				default:
 					# code...
 					break;
@@ -215,11 +250,22 @@
 				case '1':
 					if (isset($_POST['id_aula']) && isset($_POST['id_aula']) != "") {
 					    $idAula = $_POST['id_aula'];
-					    $object = new AulasModel($link);	 
+					    $object = new AulasModel($link);
+					   // $variable = $object->getAulas3($idAula);	 
+					   // error_log(print_r($variable));
 					    echo json_encode($object->getAulas3($idAula));
 					}
 					break;
-				
+				case '2':
+					if (isset($_POST['codigo']) && isset($_POST['codigo']) != "") {
+					    $codigo = $_POST['codigo'];
+					    $object = new MateriasModel($link);
+					    
+					    //error_log(print_r($variable));
+					    echo json_encode($object->getMaterias2($codigo));
+
+					}
+					break;
 				default:
 					# code...
 					break;

@@ -1,7 +1,10 @@
+//La funcion validarCampos es una mierda, debe ser arreglada
+
 var selectorDB; 
 var operacion;
 var validate;
 
+var idAula;
 var nombreAula;
 var capacidad;
 var idTipo;
@@ -83,23 +86,50 @@ function create() {
 		           	id_tipo: idTipo,
 		           	selector_db : selectorDB,
 		            operacion: operacion
-		        }, function (data, status) {
+		        },function (data, status) {
 		            $("#add_new_aulas_modal").modal("hide");
 		            read();
 		            $("#nombre_aula").val("");
 		            $("#capacidad").val("");
-					$("#id_tipo").val("");
+		            $('#selector_id_tipo_aula > option[value="1"]').attr('selected', 'selected');
 		        });
 			}
 			break;
 		case "2":
 			codigo = $("#codigo").val().trim();
-		    asignatura = $("#nombre_materia").val().trim();
-		    semestre = $("#semestre").val();
-		    horasAcademicasTotales = $("#horas_totales").val().trim();
-		    horasSemanales = $("#horas_semanales").val().trim();
-		    idTipo = $("#tipo_materia").val();
-		    idCarrera = $("#carrera").val();
+		    asignatura = $("#nombre_asignatura").val().trim();
+		    semestre = $("#selector_semestre_materia option:selected").val();
+		    horasAcademicasTotales = $("#horas_academicas_totales").val().trim();
+		    horasAcademicasSemanales = $("#horas_academicas_semanales").val().trim();
+		    idTipo = $("#selector_id_tipo_materia option:selected").val();
+		    idCarrera = $("#selector_carrera_materia option:selected").val();
+		    validate = validarCampos(selectorDB,codigo,asignatura,semestre,horasAcademicasTotales,
+		    			horasAcademicasSemanales,idTipo,idCarrera);
+		    if (!validate) {
+		    	alert("Todos los campos son obligatorios");
+		    }else{
+				$.post("edit_db_controller.php", {
+		            codigo: codigo,
+		            asignatura: asignatura,
+		           	semestre: semestre,
+		           	horas_academicas_totales:horasAcademicasTotales,
+		           	horas_academicas_semanales:horasAcademicasSemanales,
+		           	id_tipo:idTipo,
+		           	id_carrera:idCarrera,
+		           	selector_db : selectorDB,
+		            operacion: operacion
+		        },function (data, status) {
+		            $("#add_new_materias_modal").modal("hide");
+		            read();
+		            $("#codigo").val("");
+		            $("#nombre_asignatura").val("");
+		            $('#selector_semestre_materia > option[value="3"]').attr('selected', 'selected');
+		            $("#horas_academicas_totales").val("");
+		            $("#horas_academicas_semanales").val("");
+		            $('#selector_id_tipo_materia > option[value="1"]').attr('selected', 'selected');
+		            $('#selector_carrera_materia > option[value="1"]').attr('selected', 'selected');
+		        });
+		    }
 			break;
 		case "3":
 		    nombre = $("#nombre_profesor").val().trim();
@@ -138,21 +168,46 @@ function update(){
 		    }else {
 		        idAula = $("#hidden_aula_id").val();
 		        $.post("edit_db_controller.php", {
-		                id_aula: idAula,
-		                nombre_aula: nombreAula,
-		                capacidad: capacidad,
-		                id_tipo: idTipo,
-		                selector_db:selectorDB,
-		                operacion: operacion
-		        	},
-		            function (data, status) {
-		                $("#update_aulas_modal").modal("hide");
-		                read();
-		            }
-		        );
+	                id_aula: idAula,
+	                nombre_aula: nombreAula,
+	                capacidad: capacidad,
+	                id_tipo: idTipo,
+	                selector_db:selectorDB,
+	                operacion: operacion
+	        	},function (data, status) {
+	                $("#update_aulas_modal").modal("hide");
+	                read();
+	            });
 		    }
 			break;
 		case '2':
+			asignatura = $("#update_nombre_asignatura").val().trim();
+		    semestre = $("#selector_update_semestre_materia option:selected").val();
+		    horasAcademicasTotales = $("#update_horas_academicas_totales").val().trim(); 
+		    horasAcademicasSemanales = $("#update_horas_academicas_semanales").val().trim();
+		    idTipo = $("#selector_update_id_tipo_materia option:selected").val();
+		    idCarrera = $("#selector_update_carrera_materia option:selected").val();
+		    validate = validarCampos(selectorDB,asignatura,semestre,horasAcademicasTotales,
+		    			horasAcademicasSemanales,idTipo,idCarrera);
+		    if (!validate) {
+		    	alert("Todos los campos son obligatorios");
+		    }else{
+		    	codigo = $("#hidden_materia_codigo").val();
+			    $.post("edit_db_controller.php", {
+	                codigo: codigo,
+	                asignatura: asignatura,
+	                semestre: semestre,
+	                horas_academicas_totales: horasAcademicasTotales,
+	                horas_academicas_semanales: horasAcademicasSemanales,
+	                id_tipo: idTipo,
+	                id_carrera:idCarrera,
+	                selector_db:selectorDB,
+	                operacion: operacion
+	            },function (data, status) {
+	                $("#update_materias_modal").modal("hide");
+	                read();
+	           	});
+		    }
 			break;
 		case '3':
 			break;
@@ -162,20 +217,35 @@ function update(){
 }
 
 
-function deleteStuff (){
+function deleteStuff (dataA = false, dataB = false){
 	operacion="delete";
-    var conf = confirm("¿Estas seguro que deseas borrar el aula?");
-    if (conf == true) {
-        $.post("edit_db_controller.php", {
-                id_aula: idAula,
-                selector_db:selectorDB,
-                operacion: operacion
-            },
-            function (data, status) {
-                read();
-            }
-        );
-    }
+	var conf;
+	switch(selectorDB){
+		case '1':
+		    conf = confirm("¿Estas seguro que deseas borrar el aula?");
+		    if (conf == true) {
+		        $.post("edit_db_controller.php", {
+	                id_aula: dataA,
+	                selector_db:selectorDB,
+	                operacion: operacion
+		        },function (data, status) {
+		            read();
+		        });
+		    }
+	    	break;
+	    case '2':
+		    conf = confirm("¿Estas seguro que deseas borrar la materia?");
+		    if (conf == true) {
+		        $.post("edit_db_controller.php", {
+		            codigo: dataA,
+	                selector_db:selectorDB,
+	                operacion: operacion
+		        },function (data, status) {
+		            read();
+		        });
+		    }
+	    	break;
+	}
 }
 
 
@@ -189,20 +259,41 @@ function getDetails(data1 = false,data2 = false){
 				selector_db:selectorDB,
 				operacion: operacion
 			},function (data, status) {
+				console.log(data);
 		    	var aulas = JSON.parse(data);
 		        $("#update_nombre_aula").val(aulas.nombre_aula);
 		        $("#update_capacidad").val(aulas.capacidad);
 		        $('#update_id_tipo_aula > option[value='+aulas.id_tipo+']').attr('selected', 'selected');
-		        //$("#update_id_tipo").val(aulas.Tipo);
 			});
 			$("#update_aulas_modal").modal("show");
+			break;
+
+		case '2'://Leer los detalles guardados de la materia
+			$("#hidden_materia_codigo").val(data1);//Guardo el codigo del aula
+		    $.post("edit_db_controller.php", {
+		    	codigo: data1,
+		    	selector_db:selectorDB,
+		    	operacion: operacion
+		    },function (data, status) {
+		        var materias = JSON.parse(data);
+	            $("#update_codigo").val(materias.codigo);
+	            $("#update_nombre_asignatura").val(materias.asignatura);
+	            $('#selector_update_semestre_materia > option[value='+materias.semestre+']').attr('selected', 'selected');
+	            $("#update_horas_academicas_totales").val(materias.horas_academicas_totales);
+	            $("#update_horas_academicas_semanales").val(materias.horas_academicas_semanales);
+	            $('#selector_update_id_tipo_materia > option[value='+materias.id_tipo+']').attr('selected', 'selected');
+	            $('#selector_update_carrera_materia > option[value='+materias.id_carrera+']').attr('selected', 'selected');
+		    });
+		    $("#update_materias_modal").modal("show");
 			break;
 	}
 }
 
 
-function validarCampos(selectorDB,data1 = false,data2 = false ,data3 = false,data4 = false,data5 = false, data6 = false, data7 = false){
-	var validacion;
+function validarCampos(selectorDB,data1 = false,data2 = false ,data3 = false,data4 = false,
+					data5 = false, data6 = false, data7 = false){
+	var validacion = true;
+	/*
 	switch(selectorDB){
 		case "1":
 			if (data1 ==="" || data2 ==="" || data3 ===""){
@@ -234,6 +325,7 @@ function validarCampos(selectorDB,data1 = false,data2 = false ,data3 = false,dat
 			break;
 
 	}
+	*/
 	return validacion;
 }
 
