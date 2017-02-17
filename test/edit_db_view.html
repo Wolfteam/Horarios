@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar DB</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+</head>
+<!--quite el hidden debo ponerlo devuelta-->
+<body id="cuerpo" >
+<!-- ================================ Navbar de la pag.================================================== -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.ccs.unexpo.edu.ve/web/">UNEXPO LCM</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="home_view.html">Inicio</a></li>
+                <li><a href="secciones_view.html">Crear/Editar Secciones</a></li>
+                <li><a href="disponibilidad_view.html">Cargar disponibilidad</a></li>
+                <li class="active"><a href="edit_db_view.html">Editar DB</a></li>
+                <li><a href="../controller/sesiones_controller.php">Cerrar Sesion</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+<!-- ================================ /Navbar de la pag.================================================== -->
+  <br><br><br>
+<!-- ================================ Contenido de la pag.================================================== -->
+  
+<div class="container">
+<h2>Edicion de la base de datos</h2>
+    <div class="col-xs-4">
+        <label for="selector_db">Seleccione una base de datos para editar</label>
+        <select class="form-control" id="selector_db">
+            <option value="0">Seleccione..</option>
+            <option value="1">Aulas</option>
+            <option value="2">Materias</option>
+            <option value="3">Profesores</option>
+            <option value="4">Profesores_Materias</option>
+            <option value="5">Quizas horario prof?</option>
+        </select>
+    </div>
+<!--Debo agregar un boton que tara escondido, el cual cumple la funcion de abrir la ventana de agregar-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="pull-right">
+                <button class="btn btn-success" data-toggle="modal" data-target="#add_new_aulas_modal" id="add_aulas_button" hidden="">Agregar nueva aula
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="pull-right">
+                <button class="btn btn-success" data-toggle="modal" data-target="#add_new_materias_modal" id="add_materias_button" hidden="">Agregar nueva materia
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="pull-right">
+                <button class="btn btn-success" data-toggle="modal" data-target="#add_new_profesores_modal" id="add_profesores_button" hidden="">Agregar nuevo profesor
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="pull-right">
+                <button class="btn btn-success" data-toggle="modal" data-target="#add_new_profesores_materias_modal" id="add_profesores_materias_button" hidden="">Agregar nueva ocurrencia
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <br><br>
+            <div class="records_content">
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ================================ /Contenido de la pag.================================================== -->
+
+
+<!-- ================================ Aulas ADD/CREATE Modal================================================ -->
+<div class="modal fade" id="add_new_aulas_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Agregar aula</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="nombre_aula">Nombre del aula</label>
+                    <input type="text" id="nombre_aula" placeholder="2201 o Lab. Electronica I" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="capacidad">Capacidad</label>
+                    <input type="number" id="capacidad" placeholder="45" class="form-control"/>
+                </div>
+                <!--nito ver si dejare los lab como tipo 1 o los cambiare-->
+                <div class="form-group">
+                    <label for="selector_id_tipo_aula">Tipo de aula</label>
+                    <select class="form-control" id="selector_id_tipo_aula">
+                        <option value="1">Teoria</option>
+                        <option value="2">Laboratorio</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="create_aulas_button" onclick="create()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ================================ Aulas ADD/CREATE Modal================================================ -->
+
+
+<!-- ================================ Aulas Modal UPDATE ================================================== -->
+<div class="modal fade" id="update_aulas_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Editar</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="update_nombre_aula">Nombre del aula</label>
+                    <input type="text" id="update_nombre_aula" placeholder="2201 o Lab. Electronica I" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="update_capacidad">Capacidad</label>
+                    <input type="number" id="update_capacidad" placeholder="45" class="form-control"/>
+                </div>
+<!--nito ver si dejare los lab como tipo 1 o los cambiare-->
+                <div class="form-group"> 
+                    <label for="selector_update_id_tipo_aula">Tipo de aula</label>             
+                    <select class="form-control" id="selector_update_id_tipo_aula">
+                        <option value="1">Teoria</option>
+                        <option value="2">Laboratorio</option>
+                    </select>
+                </div> 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="update_aulas_button" onclick="update()" >Guardar cambios</button>
+                <input type="hidden" id="hidden_aula_id">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ================================ /Aulas Modal UPDATE ================================================== -->
+
+
+<!-- ================================ Materias ADD/CREATE Modal============================================== -->
+<div class="modal fade" id="add_new_materias_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Agregar materias</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="codigo">Codigo</label>
+                    <input type="number" id="codigo" placeholder="44514" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="nombre_materia">Nombre de la materia</label>
+                    <input type="text" id="nombre_materia" placeholder="Sistemas de Control I" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="selector_semestre_materia">Semestre</label>
+                    <select class="form-control" id="selector_semestre_materia">
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">Electiva Cod-41</option>
+                        <option value="11">Electiva Cod-43</option>
+                        <option value="12">Electiva Cod-44</option>
+                        <option value="13">Electiva Cod-46</option>
+                        <option value="14">Otros</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="horas_totales">Horas Academicas</label>
+                    <input type="number" id="horas_totales" placeholder="90" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="horas_semanales">Horas Academicas Semanales</label>
+                    <input type="number" id="horas_semanales" placeholder="5" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="selector_id_tipo_materia">Tipo de materia</label>
+                    <select class="form-control" id="selector_id_tipo_materia">
+                        <option value="1">Teoria</option>
+                        <option value="2">Laboratorio</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="selector_carrera_materia">Carrera</label>
+                    <select class="form-control" id="selector_carrera_materia">
+                        <option value="1">Sistemas</option>
+                        <option value="2">Mecanica</option>
+                        <option value="3">Industrial</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="create()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ================================ Materias ADD/CREATE Modal============================================== -->
+
+
+<!-- ================================ Materias Modal UPDATE ================================================ -->
+<div class="modal fade" id="update_materias_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Editar</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="update_nombre_materia">Nombre de la materia</label>
+                    <input type="text" id="update_nombre_materia" placeholder="Lab. Electronica I" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="selector_update_semestre_materia">Semestre</label>
+                    <select class="form-control" id="selector_update_semestre_materia">
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">Electiva Cod-41</option>
+                        <option value="11">Electiva Cod-43</option>
+                        <option value="12">Electiva Cod-44</option>
+                        <option value="13">Electiva Cod-46</option>
+                        <option value="14">Otros</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="update_horas_totales">Horas Academicas</label>
+                    <input type="number" id="update_horas_totales" placeholder="90" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="update_horas_semanales">Horas Academicas Semanales</label>
+                    <input type="number" id="update_horas_semanales" placeholder="5" class="form-control"/>
+                </div>
+<!--nito ver si dejare los lab como tipo 1 o los cambiare-->
+                <div class="form-group">
+                    <label for="selector_update_id_tipo_materia">Tipo de materia</label>
+                    <select class="form-control" id="selector_update_id_tipo_materia">
+                        <option value="1">Teoria</option>
+                        <option value="2">Laboratorio</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="selector_update_carrera_materia">Carrera</label>
+                    <select class="form-control" id="selector_update_carrera_materia">
+                        <option value="1">Sistemas</option>
+                        <option value="2">Mecanica</option>
+                        <option value="3">Industrial</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="updateMateriasDetails()">Guardar cambios</button>
+                <input type="hidden" id="hidden_materia_codigo">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ================================ /Materias Modal UPDATE ================================================ -->
+
+
+<!-- ================================ Profesores ADD/CREATE Modal============================================ -->
+<div class="modal fade" id="add_new_profesores_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Agregar profesor</h4>
+            </div>
+            <div class="modal-body">
+            <!-- Ver si este campo lo agrego y quito id o no lo agrego
+              <div class="form-group">
+                  <label for="cedula">Cedula</label>
+                  <input type="number" id="cedula" placeholder="12345678" class="form-control"/>
+              </div>
+              -->
+                <div class="form-group">
+                    <label for="nombre_profesor">Nombre del profesor</label>
+                    <input type="text" id="nombre_profesor" placeholder="Efrain" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="apellido_profesor">Apellido del profesor</label>
+                    <input type="text" id="apellido_profesor" placeholder="Bastidas" class="form-control"/>
+                </div>
+<!--nito ver que hare con la prioridad-->
+                <div class="form-group">
+                    <label for="prioridad">Prioridad</label>
+                    <input type="number" id="prioridad" placeholder="0 o 1" class="form-control"/>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="addProfesores()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ================================ Profesores ADD/CREATE Modal============================================ -->
+
+<!-- ================================ Profesores Modal UPDATE ============================================== -->
+<div class="modal fade" id="update_profesores_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Editar</h4>
+            </div>
+            <div class="modal-body">
+            <!-- Ver si este campo lo agrego y quito id o no lo agrego
+              <div class="form-group">
+                  <label for="update_cedula">Cedula</label>
+                  <input type="number" id="update_cedula" placeholder="12345678" class="form-control"/>
+              </div> 
+              -->
+                <div class="form-group">
+                    <label for="update_nombre_profesor">Nombre del profesor</label>
+                    <input type="text" id="update_nombre_profesor" placeholder="Efrain" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="update_apellido_profesor">Apellido del profesor</label>
+                    <input type="text" id="update_apellido_profesor" placeholder="Bastidas" class="form-control"/>
+                </div>
+<!--nito ver que hare con la prioridad-->
+              <div class="form-group">
+                  <label for="update_prioridad">Prioridad</label>
+                  <input type="number" id="update_prioridad" placeholder="0 o 1" class="form-control"/>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="updateProfesoresDetails()" >Guardar cambios</button>
+                <input type="hidden" id="hidden_profesor_id">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ================================ /Profesores Modal UPDATE ============================================== -->
+
+
+<!-- ============================= Profesores_Materias ADD/CREATE Modal====================================== -->
+<div class="modal fade" id="add_new_profesores_materias_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Agregar ocurrencia</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="selector_materias">Elija la materia</label>
+                    <select id="selector_materias" class="form-control">
+                        <option value="0">Seleccione una materia</option> 
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="selector_profesores">Elija el profesor</label>
+                    <select id="selector_profesores" class="form-control">
+                        <option value="0">Seleccione un profesor</option> 
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="addProfesoresMaterias()">Guardar</button>
+            </div>  
+        </div>
+    </div>
+</div>
+<!-- ============================ /Profesores_Materias ADD/CREATE Modal====================================== -->
+
+<!-- ================================ Profesores_Materias Modal UPDATE ======================================= -->
+<div class="modal fade" id="update_profesores_materias_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Editar</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="selector_update_materias">Elija la materia</label>
+                    <select id="selector_update_materias" class="form-control">
+                      <option value="0">Seleccione una materia</option> 
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="selector_update_profesores">Elija el profesor</label>
+                    <select id="selector_update_profesores" class="form-control">
+                        <option value="0">Seleccione un profesor</option> 
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="updateProfesoresMateriasDetails()" >Guardar cambios</button>
+                <input type="hidden" id="hidden_profesor_materia_id">
+                <input type="hidden" id="hidden_profesor_materia_codigo">
+            </div>         
+        </div>
+    </div>
+</div>
+<!-- ================================ /Profesores Modal UPDATE ============================================== -->
+
+
+
+
+<!-- ================================ Javascript de la pag.================================================== -->
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="edit_db.js"></script>
+    <!--
+    <script src="../js/sesiones.js"></script>
+    
+    
+    <script type="text/javascript" src="../js/edit_db_aulas.js"></script>
+    <script type="text/javascript" src="../js/edit_db_materias.js"></script>
+    <script type="text/javascript" src="../js/edit_db_profesores.js"></script>
+    <script type="text/javascript" src="../js/edit_db_profesores_materias.js"></script>
+    --> 
+</body>
+</html>

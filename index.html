@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/signin.css">
+</head>
+<body id="cuerpo" hidden="">
+<!--  =========================================== Navbar de la pag.============================================= -->
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.ccs.unexpo.edu.ve/web/">UNEXPO LCM</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="#">Acerca De</a></li>
+          <li><a href="#">Contacto</a></li>
+  <!--Nu se si lo nite luego xd
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Action</a></li>
+              <li><a href="#">Another action</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="#">Separated link</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="#">One more separated link</a></li>
+           </ul>
+          </li>
+  -->
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </nav>
+  <!--  =========================================== /Navbar de la pag.============================================= -->
+
+
+
+  <!--  ========================================= Contenido de la pag.============================================= -->
+  <div class="container">
+    <div class="form-signin">
+      <h2 class="form-signin-heading">Iniciar Sesion</h2>
+
+      <div class="form-group">
+        <label for="input_username" class="sr-only">Usuario</label>
+        <input type="text" id="input_username" name="input_username" class="form-control" placeholder="Usuario" required="" autofocus="">
+        <span class="help-block"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="input_password" class="sr-only">Contraseña</label>
+        <input type="password" id="input_password" name="input_password" class="form-control" placeholder="Password" required="">
+        <span class="help-block"></span>
+      </div>
+
+      <button class="btn btn-lg btn-primary btn-block" id="login_button">Entrar</button>
+
+    </div>
+  </div>
+
+  <div class="container" id="error_login" hidden="">
+    <div class="alert alert-danger alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <strong>Error:</strong> El usuario o clave no estan registrados.
+    </div>
+  </div>
+
+<!-- No es necesario
+    <div class="container">
+      <div class="col-xs-4">
+        <select class="form-control">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+       </select>
+      </div>
+
+    </div>
+-->
+<!--  ======================================== /Contenido de la pag.============================================= -->
+
+
+
+<!-- ===========================================JavaScript ================================================== -->
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>
