@@ -12,7 +12,9 @@
 
 	  	public function getProfesores(){
 	  		$profesor=array();
-	  		$result = $this->link->query("SELECT * FROM profesores ORDER BY id_prioridad ASC, nombre ASC");
+	  		
+	  		$result = $this->link->query("SELECT p.cedula,p.nombre,p.apellido,p.id_prioridad,pp.codigo_prioridad FROM profesores p, prioridad_profesor pp WHERE p.id_prioridad=pp.id_prioridad ORDER BY p.id_prioridad ASC");
+	  		//$result = $this->link->query("SELECT * FROM profesores ORDER BY id_prioridad ASC, nombre ASC");
 			while ($rows = $result->fetch(PDO::FETCH_ASSOC)) {
 				$profesor[]=$rows;
 			}
@@ -37,14 +39,14 @@
 	  		return $profesor;
 	  	}
 
-	  	public function setProfesores($cedula,$nombre,$apellido,$idPrioridad){
-	  		$result = $this->link->query("UPDATE profesores SET nombre='$nombre',apellido='$apellido', id_prioridad = $idPrioridad WHERE cedula=$cedula");
+	  	public function setProfesores($cedula,$cedulaNueva,$nombre,$apellido,$idPrioridad){
+	  		$result = $this->link->query("UPDATE profesores SET cedula=$cedulaNueva,nombre='$nombre',apellido='$apellido', id_prioridad = $idPrioridad WHERE cedula=$cedula");
 	  		return;
 	  	}
 
 
-		public function createProfesores ($nombre,$apellido,$idPrioridad){
-			$result = $this->link->query("INSERT INTO profesores (nombre,apellido,id_prioridad) VALUES ('$nombre','$apellido',$idPrioridad)");
+		public function createProfesores ($cedula,$nombre,$apellido,$idPrioridad){
+			$result = $this->link->query("INSERT INTO profesores (cedula,nombre,apellido,id_prioridad) VALUES ($cedula,'$nombre','$apellido',$idPrioridad)");
 			return;
 		}
 

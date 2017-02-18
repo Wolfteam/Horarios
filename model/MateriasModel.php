@@ -35,8 +35,8 @@
 			return $dato;
 		}
 
-		public function setMaterias ($codigo,$asignatura,$semestre,$horasAcademicasTotales,$horasAcademicasSemanales,$idTipo,$idCarrera) {
-			$result = $this->link->query("UPDATE materias SET asignatura='$asignatura',semestre='$semestre', horas_academicas_totales = $horasAcademicasTotales,horas_academicas_semanales=$horasAcademicasSemanales,id_tipo=$idTipo, id_carrera = $idCarrera WHERE codigo=$codigo");
+		public function setMaterias ($codigo,$codigoNuevo,$asignatura,$semestre,$horasAcademicasTotales,$horasAcademicasSemanales,$idTipo,$idCarrera) {
+			$result = $this->link->query("UPDATE materias SET codigo=$codigoNuevo, asignatura='$asignatura',semestre='$semestre', horas_academicas_totales = $horasAcademicasTotales,horas_academicas_semanales=$horasAcademicasSemanales,id_tipo=$idTipo, id_carrera = $idCarrera WHERE codigo=$codigo");
 	  		return;
 		}
 

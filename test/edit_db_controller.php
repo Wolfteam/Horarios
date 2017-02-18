@@ -10,7 +10,7 @@
 	$arrayCabeceraTablas = [
 	    "aulas" => '<table class="table table-bordered  table-hover">
 	    				<tr class="success">
-	                        <th>ID</th>
+	                        <th>No.</th>
 	                        <th>Nombre</th>
 	                        <th>Capacidad</th>
 	                        <th>Tipo</th>                              
@@ -51,6 +51,7 @@
 				                    </tr>',
 	];
 
+//Se debe cambiar las validacion isset y poner unas mas bonitas :D
 	switch ($_POST['operacion']) {
 		case "create":
 			switch ($_POST['selector_db']) {
@@ -77,7 +78,16 @@
 					    $object->createMaterias($codigo,$nombreMateria,$semestre,$horasAcademicasTotales,$horasAcademicasSemanales,$idTipo,$idCarrera);
 					}
 					break;
-				
+				case '3':
+					if (isset($_POST['cedula']) && isset($_POST['nombre_profesor']) && isset($_POST['apellido_profesor']) && isset($_POST['id_prioridad'])) {
+						$cedula = $_POST['cedula'];
+						$nombreProfesor = $_POST['nombre_profesor'];
+					    $apellidoProfesor = $_POST['apellido_profesor'];
+					 	$idPrioridad = $_POST['id_prioridad'];
+					    $object = new ProfesoresModel($link);
+					    $object->createProfesores($cedula,$nombreProfesor,$apellidoProfesor,$idPrioridad);
+					}
+					break;
 				default:
 					# code...
 					break;
@@ -91,13 +101,15 @@
 					$data = $arrayCabeceraTablas['aulas'];
 					$aulas = $object->getAulas();
 					if (count($aulas) > 0) {
+						$number=0;
 						foreach ($aulas as $key) {
+							$number++;
 							//Nota como usa el .= para concatener cada fila
 						    $data.= "<tr>
-								<td>".$key['id_aula']."</td>
+								<td>".$number."</td>
 								<td>".$key['nombre_aula']."</td>
 								<td>".$key['capacidad']."</td>
-								<td>".$key['id_tipo']."</td>
+								<td>".$key['nombre_tipo']."</td>
 								<td> <button onclick='getDetails(".$key['id_aula'].")' class='btn btn-warning'>Editar</button> </td>
 								<td> <button onclick='deleteStuff(".$key['id_aula'].")' class='btn btn-danger'>Borrar</button> </td>
 								</tr>";
@@ -147,9 +159,9 @@
 								<td>".$key['cedula']."</td>
 								<td>".$key['nombre']."</td>
 								<td>".$key['apellido']."</td>
-								<td>".$key['id_prioridad']."</td>
-								<td> <button onclick='getProfesoresDetails(".$key['cedula'].")' class='btn btn-warning'>Editar</button> </td>
-								<td> <button onclick='deleteProfesores(".$key['cedula'].")' class='btn btn-danger'>Borrar</button> </td>
+								<td>".$key['codigo_prioridad']."</td>
+								<td> <button onclick='getDetails(".$key['cedula'].")' class='btn btn-warning'>Editar</button> </td>
+								<td> <button onclick='deleteStuff(".$key['cedula'].")' class='btn btn-danger'>Borrar</button> </td>
 								</tr>";
 						}
 					}else {
@@ -201,9 +213,10 @@
 					}
 					break;
 				case '2':
-					if (isset($_POST['codigo']) && isset($_POST['asignatura']) && isset($_POST['semestre']) && isset($_POST['horas_academicas_totales']) && isset($_POST['horas_academicas_semanales']) && isset($_POST['id_tipo']) && isset($_POST['id_carrera'])) {	
+					if (isset($_POST['codigo']) && isset($_POST['codigo_nuevo']) && isset($_POST['asignatura']) && isset($_POST['semestre']) && isset($_POST['horas_academicas_totales']) && isset($_POST['horas_academicas_semanales']) && isset($_POST['id_tipo']) && isset($_POST['id_carrera'])) {	
 
 						$codigo = $_POST['codigo'];
+						$codigoNuevo = $_POST['codigo_nuevo'];
 					    $asignatura = $_POST['asignatura'];
 					    $semestre = $_POST['semestre'];
 					    $horasAcademicasTotales = $_POST['horas_academicas_totales'];
@@ -211,11 +224,23 @@
 					 	$idTipo = $_POST['id_tipo'];
 					 	$idCarrera = $_POST['id_carrera'];
 					    $obj = new MateriasModel($link);			 
-					    $obj->setMaterias($codigo,$asignatura,$semestre,$horasAcademicasTotales,
-					    	$horasAcademicasSemanales,$idTipo,$idCarrera);
+					    $obj->setMaterias($codigo,$codigoNuevo,$asignatura,$semestre,
+					    	$horasAcademicasTotales,$horasAcademicasSemanales,$idTipo,$idCarrera);
 					}
 					break;
-				
+				case '3':
+					if (isset($_POST['nombre_profesor']) && isset($_POST['apellido_profesor']) && isset($_POST['id_prioridad']) && isset($_POST['cedula']) && isset($_POST['cedula_nueva']) && isset($_POST['cedula_nueva']) != ""){	 
+
+					    $cedula = $_POST['cedula'];
+					    $cedulaNueva = $_POST['cedula_nueva'];
+						$nombreProfesor = $_POST['nombre_profesor'];
+					    $apellidoProfesor = $_POST['apellido_profesor'];
+					 	$idPrioridad = $_POST['id_prioridad'];
+					    $object = new ProfesoresModel($link);			 
+					    $var = $object->setProfesores($cedula,$cedulaNueva,$nombreProfesor,$apellidoProfesor,$idPrioridad);
+					    error_log($var);
+					}
+					break;
 				default:
 					# code...
 					break;
@@ -237,6 +262,14 @@
 					    $object = new MateriasModel($link);
 					    $object->deleteMaterias($codigo);
 					}
+					break;
+
+				case '3':
+					if (isset($_POST['cedula']) && isset($_POST['cedula']) != "") {
+					    $cedula = $_POST['cedula'];
+					    $object = new ProfesoresModel($link);
+					    $object->deleteProfesores($cedula);
+					}				
 					break;
 				default:
 					# code...
@@ -266,6 +299,14 @@
 
 					}
 					break;
+				case '3':
+					if (isset($_POST['cedula']) && isset($_POST['cedula']) != "") {
+					    $cedula = $_POST['cedula'];
+					    $object = new ProfesoresModel($link);
+					    echo json_encode($object->getProfesores3($cedula));
+					}
+					break;
+
 				default:
 					# code...
 					break;

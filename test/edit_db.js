@@ -17,8 +17,8 @@ var horasSemanales;
 var idCarrera;
 
 var cedula;
-var nombre;
-var apellido;
+var nombreProfesor;
+var apellidoProfesor;
 var idPrioridad;
 
 $(document).ready(function () {
@@ -132,9 +132,31 @@ function create() {
 		    }
 			break;
 		case "3":
-		    nombre = $("#nombre_profesor").val().trim();
-		    apellido = $("#apellido_profesor").val().trim();
-			idPrioridad = $("#prioridad").val();
+			cedula = $("#cedula").val().trim();
+		    nombreProfesor = $("#nombre_profesor").val().trim();
+		    apellidoProfesor = $("#apellido_profesor").val().trim();
+			idPrioridad = $("#selector_prioridad_profesor option:selected").val();
+			validate = validarCampos(selectorDB,cedula,nombreProfesor,apellidoProfesor,idPrioridad);
+			if (!validate) {
+				alert("Todos los campos son obligatorios");
+			}else{
+				$.post("edit_db_controller.php", {
+					cedula:cedula,
+		            nombre_profesor: nombreProfesor,
+		            apellido_profesor:apellidoProfesor,
+		           	id_prioridad: idPrioridad,
+		           	selector_db : selectorDB,
+		            operacion: operacion
+		        },function (data, status) {
+		            $("#add_new_profesores_modal").modal("hide");
+		            read();
+		            $("#cedula").val("");
+		            $("#nombre_profesor").val("");
+		            $("#apellido_profesor").val("");
+					$('#selector_prioridad_profesor > option[value="1"]').attr('selected','selected');
+		        });
+			}
+
 			break;
 		case "4":
 			cedula = document.getElementById("selector_profesores").value;
@@ -181,6 +203,7 @@ function update(){
 		    }
 			break;
 		case '2':
+			var codigoNuevo = $("#update_codigo").val().trim();
 			asignatura = $("#update_nombre_asignatura").val().trim();
 		    semestre = $("#selector_update_semestre_materia option:selected").val();
 		    horasAcademicasTotales = $("#update_horas_academicas_totales").val().trim(); 
@@ -195,6 +218,7 @@ function update(){
 		    	codigo = $("#hidden_materia_codigo").val();
 			    $.post("edit_db_controller.php", {
 	                codigo: codigo,
+	                codigo_nuevo:codigoNuevo,
 	                asignatura: asignatura,
 	                semestre: semestre,
 	                horas_academicas_totales: horasAcademicasTotales,
@@ -210,6 +234,28 @@ function update(){
 		    }
 			break;
 		case '3':
+			var cedulaNueva = $("#update_cedula").val().trim();
+			nombreProfesor = $("#update_nombre_profesor").val().trim();
+			apellidoProfesor = $("#update_apellido_profesor").val().trim();
+			idPrioridad = $("#selector_update_prioridad_profesor option:selected").val();
+			cedula = $("#hidden_profesor_cedula").val();
+			validate = validarCampos(cedula,nombreProfesor,apellidoProfesor,idPrioridad);
+			if (!validate) {
+				alert("Todos los campos son obligatorios");
+			}else{
+				$.post("edit_db_controller.php", {
+	                cedula: cedula,
+	                cedula_nueva:cedulaNueva,
+	                nombre_profesor: nombreProfesor,
+	                apellido_profesor:apellidoProfesor,
+	                id_prioridad: idPrioridad,
+	                selector_db:selectorDB,
+	                operacion: operacion
+	            },function (data, status) {
+	                $("#update_profesores_modal").modal("hide");
+	                read();
+	            });
+			}
 			break;
 		case '4':
 			break;			
@@ -245,6 +291,18 @@ function deleteStuff (dataA = false, dataB = false){
 		        });
 		    }
 	    	break;
+	    case '3':
+			conf = confirm("¿Estas seguro que deseas borrar al profesor?");
+		    if (conf == true) {
+		        $.post("edit_db_controller.php", {
+	                cedula: dataA,
+	                selector_db:selectorDB,
+	                operacion: operacion
+	            },function (data, status) {
+	                read();
+	            });
+		    }
+	    	break;
 	}
 }
 
@@ -263,7 +321,7 @@ function getDetails(data1 = false,data2 = false){
 		    	var aulas = JSON.parse(data);
 		        $("#update_nombre_aula").val(aulas.nombre_aula);
 		        $("#update_capacidad").val(aulas.capacidad);
-		        $('#update_id_tipo_aula > option[value='+aulas.id_tipo+']').attr('selected', 'selected');
+		        $('#selector_update_id_tipo_aula > option[value='+aulas.id_tipo+']').attr('selected', 'selected');
 			});
 			$("#update_aulas_modal").modal("show");
 			break;
@@ -286,6 +344,23 @@ function getDetails(data1 = false,data2 = false){
 		    });
 		    $("#update_materias_modal").modal("show");
 			break;
+
+		case '3':
+			$("#hidden_profesor_cedula").val(data1);
+		    $.post("edit_db_controller.php", {
+		    	cedula: data1,
+		    	selector_db:selectorDB,
+		    	operacion: operacion
+		    },function (data, status) {
+	            var profesores = JSON.parse(data);
+	            $("#update_cedula").val(profesores.cedula);
+	            $("#update_nombre_profesor").val(profesores.nombre);
+	            $("#update_apellido_profesor").val(profesores.apellido);
+	            $('#selector_update_prioridad_profesor > option[value='+profesores.id_prioridad+']').attr('selected', 'selected');
+		    });
+		    $("#update_profesores_modal").modal("show");
+			break;
+
 	}
 }
 

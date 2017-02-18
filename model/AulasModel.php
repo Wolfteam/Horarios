@@ -12,7 +12,8 @@
 
 		public function getAulas(){
 			$aulas=array();
-	  		$result = $this->link->query("SELECT * FROM aulas");	
+			$result = $this->link->query("SELECT a.id_aula,a.nombre_aula,a.capacidad,a.id_tipo,tam.nombre_tipo FROM aulas a, tipo_aula_materia tam WHERE a.id_tipo=tam.id_tipo ORDER BY id_aula ASC");
+	  		//$result = $this->link->query("SELECT * FROM aulas");	
 			while ($rows = $result->fetch(PDO::FETCH_ASSOC)) {
 				$aulas[]=$rows;
 			}
