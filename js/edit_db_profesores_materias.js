@@ -94,8 +94,9 @@ function deleteProfesoresMaterias(idProfesor,codigoMateria) {
 }
 
 function addContent(op){
+    var operacion;
     if (op=="update_data") {
-         var operacion="mostrar_materias";
+         operacion="mostrar_materias";
         $.post("../controller/edit_db_profesores_materias_controller.php",{operacion:operacion},function(data){
             $("#selector_update_materias").html(data);
         });
@@ -104,7 +105,7 @@ function addContent(op){
              $("#selector_update_profesores").html(data);
         }); 
     }else{
-        var operacion="mostrar_materias";
+        operacion="mostrar_materias";
         $.post("../controller/edit_db_profesores_materias_controller.php",{operacion:operacion},function(data){
             $("#selector_materias").html(data);
         });

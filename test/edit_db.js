@@ -72,7 +72,7 @@ $(document).ready(function () {
 function create() {
 	operacion = "create";
 	switch(selectorDB){
-		case "1":
+		case "1"://Crear aulas
 			nombreAula = $("#nombre_aula").val().trim();
 			capacidad = $("#capacidad").val().trim();
 			idTipo = $("#selector_id_tipo_aula option:selected").val();
@@ -95,7 +95,7 @@ function create() {
 		        });
 			}
 			break;
-		case "2":
+		case "2"://Crear materias
 			codigo = $("#codigo").val().trim();
 		    asignatura = $("#nombre_asignatura").val().trim();
 		    semestre = $("#selector_semestre_materia option:selected").val();
@@ -131,7 +131,7 @@ function create() {
 		        });
 		    }
 			break;
-		case "3":
+		case "3"://Crear profesor
 			cedula = $("#cedula").val().trim();
 		    nombreProfesor = $("#nombre_profesor").val().trim();
 		    apellidoProfesor = $("#apellido_profesor").val().trim();
@@ -156,11 +156,23 @@ function create() {
 					$('#selector_prioridad_profesor > option[value="1"]').attr('selected','selected');
 		        });
 			}
-
 			break;
-		case "4":
+		case "4"://Crear profesores_materias
 			cedula = document.getElementById("selector_profesores").value;
 			codigo = document.getElementById("selector_materias").value;
+			if (cedula!=0 && codigo!=0) {
+				$.post("edit_db_controller.php", {
+		            cedula: cedula,
+		            codigo:codigo,
+		            selector_db : selectorDB,
+		            operacion: operacion
+		        },function (data, status) {
+		            $("#add_new_profesores_materias_modal").modal("hide");
+		            read();
+		            $('#selector_materias > option[value="0"]').attr('selected','selected');
+		            $('#selector_profesores > option[value="0"]').attr('selected','selected');
+		        });				
+			}
 			break;
 	}
 }
@@ -168,6 +180,30 @@ function create() {
 //Esta funcion lee de la DB de acuerdo a la opcion seleccionada en el selector
 function read() {
     operacion="read";
+    //Estaria genial si pudiera hacer que el selectorDB 4 funcione sin esto
+    if (selectorDB==4){
+    	var mostrar = "mostrar_materias";
+	 	$.post("edit_db_controller.php", {
+	    	selector_db:selectorDB,
+	    	operacion:operacion,
+	    	mostrar:mostrar
+	    },function (data, status) {
+	        $("#selector_materias").html(data);
+	        $("#selector_update_materias").html(data);
+	    });
+	    console.log(mostrar);
+	 	mostrar = "mostrar_profesores";
+	 	$.post("edit_db_controller.php", {
+	    	selector_db:selectorDB,
+	    	operacion:operacion,
+	    	mostrar:mostrar
+	    },function (data, status) {
+	        $("#selector_profesores").html(data);
+	        $("#selector_update_profesores").html(data);
+	    });
+	    console.log(mostrar);
+    }
+    //Con este trozo se leen todas las demas
     $.post("edit_db_controller.php", {
     	selector_db:selectorDB,
     	operacion:operacion
@@ -180,7 +216,7 @@ function read() {
 function update(){
 	operacion = "update";
 	switch(selectorDB){
-		case '1':
+		case '1'://Update aulas
 			nombreAula = $("#update_nombre_aula").val().trim();
 		    capacidad = $("#update_capacidad").val().trim();
 		    idTipo = $("#selector_update_id_tipo_aula option:selected").val();
@@ -202,7 +238,7 @@ function update(){
 	            });
 		    }
 			break;
-		case '2':
+		case '2'://Update materias
 			var codigoNuevo = $("#update_codigo").val().trim();
 			asignatura = $("#update_nombre_asignatura").val().trim();
 		    semestre = $("#selector_update_semestre_materia option:selected").val();
@@ -233,7 +269,7 @@ function update(){
 	           	});
 		    }
 			break;
-		case '3':
+		case '3'://Update profesores
 			var cedulaNueva = $("#update_cedula").val().trim();
 			nombreProfesor = $("#update_nombre_profesor").val().trim();
 			apellidoProfesor = $("#update_apellido_profesor").val().trim();
@@ -257,12 +293,27 @@ function update(){
 	            });
 			}
 			break;
-		case '4':
+		case '4'://Update profesor_materias
+		    cedulaNueva = document.getElementById("selector_update_profesores").value;
+    		codigoNuevo = document.getElementById("selector_update_materias").value;
+	    	cedula = $("#hidden_profesor_materia_cedula").val();
+	        codigo = $("#hidden_profesor_materia_codigo").val();
+	        $.post("edit_db_controller.php", {
+                cedula_nueva: cedulaNueva,
+                codigo_nuevo: codigoNuevo,
+                cedula: cedula,
+                codigo: codigo,
+                selector_db:selectorDB, 
+                operacion: operacion
+	        },function (data, status) {
+                $("#update_profesores_materias_modal").modal("hide");
+                read();
+	        });
 			break;			
 	}
 }
 
-
+//Este metodo debe volverse a pensar, para hacerlo mas simple
 function deleteStuff (dataA = false, dataB = false){
 	operacion="delete";
 	var conf;
@@ -302,6 +353,19 @@ function deleteStuff (dataA = false, dataB = false){
 	                read();
 	            });
 		    }
+		    break;
+		case '4':
+			conf = confirm("¿Estas seguro que deseas borrar la asignacion de este profesor a esta materia?");
+		    if (conf == true) {
+		        $.post("edit_db_controller.php", {
+	                cedula: dataA,
+	                codigo:dataB,
+	                selector_db:selectorDB,
+	                operacion: operacion
+	            },function (data, status) {
+	                read();
+	            });
+		    }
 	    	break;
 	}
 }
@@ -317,7 +381,6 @@ function getDetails(data1 = false,data2 = false){
 				selector_db:selectorDB,
 				operacion: operacion
 			},function (data, status) {
-				console.log(data);
 		    	var aulas = JSON.parse(data);
 		        $("#update_nombre_aula").val(aulas.nombre_aula);
 		        $("#update_capacidad").val(aulas.capacidad);
@@ -327,7 +390,7 @@ function getDetails(data1 = false,data2 = false){
 			break;
 
 		case '2'://Leer los detalles guardados de la materia
-			$("#hidden_materia_codigo").val(data1);//Guardo el codigo del aula
+			$("#hidden_materia_codigo").val(data1);//Guardo el codigo
 		    $.post("edit_db_controller.php", {
 		    	codigo: data1,
 		    	selector_db:selectorDB,
@@ -345,8 +408,8 @@ function getDetails(data1 = false,data2 = false){
 		    $("#update_materias_modal").modal("show");
 			break;
 
-		case '3':
-			$("#hidden_profesor_cedula").val(data1);
+		case '3'://Leer los detalles guardados del profesor
+			$("#hidden_profesor_cedula").val(data1);//Guardo la cedula
 		    $.post("edit_db_controller.php", {
 		    	cedula: data1,
 		    	selector_db:selectorDB,
@@ -361,10 +424,18 @@ function getDetails(data1 = false,data2 = false){
 		    $("#update_profesores_modal").modal("show");
 			break;
 
+		case '4'://En este caso solo guardo valores y selecciono los valores default
+		    $("#hidden_profesor_materia_cedula").val(data1);
+    		$("#hidden_profesor_materia_codigo").val(data2);
+    		$('#selector_update_profesores > option[value='+data1+']').attr('selected', 'selected');
+    		$('#selector_update_materias > option[value='+data2+']').attr('selected', 'selected');	
+    		$("#update_profesores_materias_modal").modal("show");
+			break;
 	}
 }
 
-
+//Este metodo se debe pensar para que valide cualquier cosa que se le mande
+//independientemente de los parametros que le pase
 function validarCampos(selectorDB,data1 = false,data2 = false ,data3 = false,data4 = false,
 					data5 = false, data6 = false, data7 = false){
 	var validacion = true;
