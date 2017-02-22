@@ -38,41 +38,158 @@
 	<br><br><br>
 <!-- ================================ Contenido de la pag.================================================== -->	
 <div class="container">
-	<div class="row">
+	<div class="form-group row">
 		<div class="col-md-12">	
-			<h2>Seleccione el profesor</h2>
+			<h2>Cargar disponibilidad</h2>
+		</div>
+		<div class="col-xs-6">
+			<label for="selector_profesores">Seleccione el profesor</label>
+			<select  class="form-control" id="selector_profesores">
+				<option value="0">Seleccione profesor</option>
+			</select>
+		</div>
+	</div>	
+
+	<div class="form-group row">
+		<div class="col-xs-10">
+			<label for="horas_a_cumplir">Horas por asignar</label>
+			<input type="text=" id="horas_a_cumplir" disabled="" value="" maxlength="2" size="2">
+			<label for="horas_restantes">Horas restantes</label>
+			<input type="text=" id="horas_restantes" disabled="" value="" maxlength="2" size="2">			
 		</div>
 	</div>
 
-	<label for="selectorProfesores">Seleccione el profesor</label>
-	<select id="selectorProfesores" class="form-control">
-		<option value="0">Seleccione profesor</option>
-	</select>
-
-	<br>
-	<label for="horas_por_asignar">Horas por asignar</label>
-	<input type="text=" id="horas_por_asignar" disabled="" value="" maxlength="2" size="2">
-
-	<label for="horas_asignadas">Horas asignadas</label>
-	<input type="text=" id="horas_asignadas" disabled="" value="" maxlength="2" size="2">
-
+	<h3>Introduzca su disponibilidad:</h3>
 	<div class="row">
-		<div class="col-md-12">
-		    <div class="pull-left">
-		        <button class="btn btn-success" data-toggle="modal" data-target="#add_new_record_modal">Agregar nueva disponibilidad</button>
-		    </div>
-		    <div class="pull-center">
-		        <button class="btn btn-success" data-toggle="modal" data-target="#update_disponibilidad_modal">Editar</button>
-		    </div>
-
+		<div class="col-xs-12">			
+			<table class="table table-bordered text-center">
+			    <thead>
+				    <tr class="success">
+				    	<th>Hora</th>
+				        <th >Lunes</th>
+				        <th >Martes</th>
+				        <th >Miercoles</th> 
+				        <th >Jueves</th>
+				        <th >Viernes</th>
+				        <th >Sabado</th>
+				    </tr>    	
+			    </thead>
+			    <tbody>
+			    	<tr>
+			    		<td class="danger">7:00am a 7:50am</td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    	</tr>
+			    	<tr>
+			    		<td class="danger">7:50am a 8:40am</td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    	</tr>
+			    	<tr>
+			    		<td class="danger">8:40am a 9:30am</td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    	</tr>
+			    	<tr>
+			    		<td class="danger">9:30am a 10:20am</td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    	</tr>
+			    	<tr>
+			    		<td class="danger">10:20am a 11:10am</td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    	</tr>
+			    	<tr>
+			    		<td class="danger">11:10am a 12:00pm</td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    	</tr>
+			    	<tr>
+			    		<td class="danger">1:00pm a 1:50pm</td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    	</tr>
+			    	<tr>
+			    		<td class="danger">1:50pm a 2:40pm</td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    	</tr>
+			    	<tr>
+			    		<td class="danger">2:40pm a 3:30pm</td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    	</tr>
+			    	<tr>
+			    		<td class="danger">3:30pm a 4:20pm</td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    	</tr>
+			    	<tr>
+			    		<td class="danger">4:20pm a 5:10pm</td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    	</tr>
+			    	<tr>
+			    		<td class="danger">5:10pm a 6:00pm</td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    		<td></td>
+			    	</tr>
+			    </tbody>      
+			</table>
 		</div>
 	</div>
+
 	<div class="row">
-		<div class="col-md-12">
-			<h3>Horario:</h3>
-			<div class="records_content">
-			</div>
-		</div>
+		<button class="btn btn-success center-block">Guardar disponibilidad</button>		
 	</div>
 </div>
 	
@@ -84,7 +201,7 @@
 
 
 
-<!-- ================================ Modal ADD/CREATE ================================================== -->
+<!-- ================================ Modal ADD/CREATE ================================================== 
 <div class="modal fade" id="add_new_record_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -119,10 +236,10 @@
         </div>
     </div>
 </div>
-<!-- ================================ /Modal ADD/CREATE ================================================== -->
+ ================================ /Modal ADD/CREATE ================================================== -->
 
 
-<!-- ================================ Modal UPDATE ================================================== -->
+<!-- ================================ Modal UPDATE ================================================== 
 <div class="modal fade" id="update_disponibilidad_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -136,7 +253,7 @@
 					<option value="0">Seleccione un dia</option>	
 				</select>
 				<div class="form-group">
-<!--la tabla debe hacerse en el servidor-->
+
 					<table class="table table-bordered  table-hover text-center">
 	                    <tr class="success">
 	                        <th class="text-center">Hora Inicio</th>
@@ -161,7 +278,8 @@
         </div>
     </div>
 </div>
-<!-- ================================ /Modal UPDATE ================================================== -->
+
+ ================================ /Modal UPDATE ================================================== -->
 
 
 
@@ -200,7 +318,7 @@
 	<script type="text/javascript" src="../js/jquery.min.js"></script>
 	<script src="../js/sesiones.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/horario_profesor.js"></script>
+	<script src="../js/disponibilidad.js"></script>
 	
 </body>
 </html>

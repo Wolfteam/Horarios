@@ -192,7 +192,6 @@ function read() {
 	        $("#selector_materias").html(data);
 	        $("#selector_update_materias").html(data);
 	    });
-	    console.log(mostrar);
 	 	mostrar = "mostrar_profesores";
 	 	$.post(ruta, {
 	    	selector_db:selectorDB,
@@ -202,7 +201,6 @@ function read() {
 	        $("#selector_profesores").html(data);
 	        $("#selector_update_profesores").html(data);
 	    });
-	    console.log(mostrar);
     }
     //Con este trozo se leen todas las demas
     $.post(ruta, {
