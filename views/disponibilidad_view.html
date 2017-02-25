@@ -51,10 +51,10 @@
 	</div>	
 
 	<div class="form-group row">
-		<div class="col-xs-10">
-			<label for="horas_a_cumplir">Horas por asignar</label>
+		<div class="col-xs-9">
+			<label for="horas_a_cumplir">Horas por asignar:</label>
 			<input type="text=" id="horas_a_cumplir" disabled="" value="" maxlength="2" size="2">
-			<label for="horas_restantes">Horas restantes</label>
+			<label for="horas_restantes">Horas restantes:</label>
 			<input type="text=" id="horas_restantes" disabled="" value="" maxlength="2" size="2">			
 		</div>
 	</div>
@@ -62,21 +62,21 @@
 	<h3>Introduzca su disponibilidad:</h3>
 	<div class="row">
 		<div class="col-xs-12">			
-			<table class="table table-bordered text-center">
+			<table class="table table-bordered table-condensed table-hover" id="tabla_horario">
 			    <thead>
 				    <tr class="success">
-				    	<th>Hora</th>
-				        <th >Lunes</th>
-				        <th >Martes</th>
-				        <th >Miercoles</th> 
-				        <th >Jueves</th>
-				        <th >Viernes</th>
-				        <th >Sabado</th>
+				    	<th class="col-sm-2 text-center">Hora</th>
+				        <th class="text-center">Lunes</th>
+				        <th class="text-center">Martes</th>
+				        <th class="text-center">Miercoles</th> 
+				        <th class="text-center">Jueves</th>
+				        <th class="text-center">Viernes</th>
+				        <th class="text-center">Sabado</th>
 				    </tr>    	
 			    </thead>
-			    <tbody>
+			    <tbody class="text-center">
 			    	<tr>
-			    		<td class="danger">7:00am a 7:50am</td>
+			    		<td class="info">7:00am a 7:50am</td>
 			    		<td></td>
 			    		<td></td>
 			    		<td></td>
@@ -85,7 +85,7 @@
 			    		<td></td>
 			    	</tr>
 			    	<tr>
-			    		<td class="danger">7:50am a 8:40am</td>
+			    		<td class="info">7:50am a 8:40am</td>
 			    		<td></td>
 			    		<td></td>
 			    		<td></td>
@@ -94,7 +94,7 @@
 			    		<td></td>
 			    	</tr>
 			    	<tr>
-			    		<td class="danger">8:40am a 9:30am</td>
+			    		<td class="info">8:40am a 9:30am</td>
 			    		<td></td>
 			    		<td></td>
 			    		<td></td>
@@ -103,7 +103,7 @@
 			    		<td></td>
 			    	</tr>
 			    	<tr>
-			    		<td class="danger">9:30am a 10:20am</td>
+			    		<td class="info">9:30am a 10:20am</td>
 			    		<td></td>
 			    		<td></td>
 			    		<td></td>
@@ -112,7 +112,7 @@
 			    		<td></td>
 			    	</tr>
 			    	<tr>
-			    		<td class="danger">10:20am a 11:10am</td>
+			    		<td class="info">10:20am a 11:10am</td>
 			    		<td></td>
 			    		<td></td>
 			    		<td></td>
@@ -121,7 +121,7 @@
 			    		<td></td>
 			    	</tr>
 			    	<tr>
-			    		<td class="danger">11:10am a 12:00pm</td>
+			    		<td class="info">11:10am a 12:00pm</td>
 			    		<td></td>
 			    		<td></td>
 			    		<td></td>
@@ -130,7 +130,7 @@
 			    		<td></td>
 			    	</tr>
 			    	<tr>
-			    		<td class="danger">1:00pm a 1:50pm</td>
+			    		<td class="info">1:00pm a 1:50pm</td>
 			    		<td></td>
 			    		<td></td>
 			    		<td></td>
@@ -139,7 +139,7 @@
 			    		<td></td>
 			    	</tr>
 			    	<tr>
-			    		<td class="danger">1:50pm a 2:40pm</td>
+			    		<td class="info">1:50pm a 2:40pm</td>
 			    		<td></td>
 			    		<td></td>
 			    		<td></td>
@@ -148,7 +148,7 @@
 			    		<td></td>
 			    	</tr>
 			    	<tr>
-			    		<td class="danger">2:40pm a 3:30pm</td>
+			    		<td class="info">2:40pm a 3:30pm</td>
 			    		<td></td>
 			    		<td></td>
 			    		<td></td>
@@ -157,7 +157,7 @@
 			    		<td></td>
 			    	</tr>
 			    	<tr>
-			    		<td class="danger">3:30pm a 4:20pm</td>
+			    		<td class="info">3:30pm a 4:20pm</td>
 			    		<td></td>
 			    		<td></td>
 			    		<td></td>
@@ -166,7 +166,7 @@
 			    		<td></td>
 			    	</tr>
 			    	<tr>
-			    		<td class="danger">4:20pm a 5:10pm</td>
+			    		<td class="info">4:20pm a 5:10pm</td>
 			    		<td></td>
 			    		<td></td>
 			    		<td></td>
@@ -175,7 +175,7 @@
 			    		<td></td>
 			    	</tr>
 			    	<tr>
-			    		<td class="danger">5:10pm a 6:00pm</td>
+			    		<td class="info">5:10pm a 6:00pm</td>
 			    		<td></td>
 			    		<td></td>
 			    		<td></td>
@@ -189,7 +189,7 @@
 	</div>
 
 	<div class="row">
-		<button class="btn btn-success center-block">Guardar disponibilidad</button>		
+		<button class="btn btn-success center-block" id="cargar_disponibilidad">Guardar disponibilidad</button>
 	</div>
 </div>
 	
