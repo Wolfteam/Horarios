@@ -1,6 +1,6 @@
 <?php 
 /**
- * Esta clase contiene metodos para crear/borrar disponibilidad de profesores.
+ * Esta clase contiene metodos para leer/crear/borrar disponibilidad de profesores.
  * No existe metodo para actualizar puesto que lo que se hace es borrar los
  * registros anteriores y crear nuevos, esto permite prescindir de un metodo
  * update/set.
