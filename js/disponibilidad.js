@@ -18,10 +18,13 @@ $(document).ready(function() {
 				}, function(data) {
 					limpiarCeldas();
 					var horas = $.parseJSON(data);
+					console.log(data);
 					horasACumplir = horas.horas_a_cumplir;
 					//debo hacer una forma de saber si ya tiene las horas cargadas (en cuyo caso
 					//horasRestantes =0 o si no las tiene, en cuyo caso horasRestantes=horasACumplir)
-					horasRestantes = horasACumplir;
+					if (horas.disponibilidad==0) {
+						horasRestantes = horasACumplir;
+					}					
 					$("#horas_a_cumplir").val(horasACumplir);
 					$("#horas_restantes").val(horasRestantes);
 					//Se debe cargar la disponibilidadque tenia el profesor

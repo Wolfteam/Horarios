@@ -16,9 +16,16 @@ if (isset($_POST['operacion']) && $_POST['operacion']=="read") {
 }
 
 if (isset($_POST['cedula']) && $_POST['cedula']!="0") {	
+	$resultado = [];
 	$cedula = $_POST['cedula'];
+	//error_log($cedula);
 	$horasACumplir = $object->getHorasACumplir($cedula);
-	echo json_encode($horasACumplir);
+	$disponibilidad = count($object->getDisponiblidad($cedula));
+	$resultado=["horas_a_cumplir"=>$horasACumplir,
+				"disponibilidad"=>$disponibilidad,
+	];
+	echo json_encode($resultado);
+	
 }
 
 

@@ -13,14 +13,13 @@
 	  	public function getProfesores(){
 	  		$profesor=array();
 	  		$result = $this->link->query("SELECT p.cedula,p.nombre,p.apellido,p.id_prioridad,pp.codigo_prioridad FROM profesores p, prioridad_profesor pp WHERE p.id_prioridad=pp.id_prioridad ORDER BY p.id_prioridad ASC");
-	  		//$result = $this->link->query("SELECT * FROM profesores ORDER BY id_prioridad ASC, nombre ASC");
 			while ($rows = $result->fetch(PDO::FETCH_ASSOC)) {
 				$profesor[]=$rows;
 			}
 			return $profesor;
 	  	}
 
-	  	//A esta funcion le puede llegar un array de ids 
+	  	//A esta funcion le puede llegar un array de cedulas
 	  	public function getProfesor2($cedula){
 	  		$filas = count($cedula);
 	  		for ($i=0; $i < $filas; $i++) { 
@@ -39,10 +38,20 @@
 	  	}
 
 	  	public function getHorasACumplir($cedula){
-	  		//devuelve puros 7 en horas por asignar
 	  		$result = $this->link->query("SELECT pp.horas_a_cumplir FROM profesores p, prioridad_profesor pp WHERE p.cedula=$cedula AND p.id_prioridad=pp.id_prioridad");
 	  		$profesor=$result->fetch(PDO::FETCH_ASSOC);
-	  		return $profesor;	  		
+	  		$horasACumplir = $profesor['horas_a_cumplir'];
+	  		return $horasACumplir;	  		
+	  	}
+
+	  	public function getDisponiblidad($cedula){
+	  		$profesores=[];
+	  		$result = $this->link->query("SELECT * FROM disponibilidad_profesores WHERE cedula=$cedula");
+	  		//$profesores[]=$result->fetchAll(PDO::FETCH_ASSOC);
+	  		while ($rows = $result->fetch(PDO::FETCH_ASSOC)) {
+				$profesores[]=$rows;
+			}
+	  		return $profesores;
 	  	}
 
 	  	public function setProfesores($cedula,$cedulaNueva,$nombre,$apellido,$idPrioridad){
