@@ -44,16 +44,6 @@
 	  		return $horasACumplir;	  		
 	  	}
 
-	  	public function getDisponiblidad($cedula){
-	  		$profesores=[];
-	  		$result = $this->link->query("SELECT * FROM disponibilidad_profesores WHERE cedula=$cedula");
-	  		//$profesores[]=$result->fetchAll(PDO::FETCH_ASSOC);
-	  		while ($rows = $result->fetch(PDO::FETCH_ASSOC)) {
-				$profesores[]=$rows;
-			}
-	  		return $profesores;
-	  	}
-
 	  	public function setProfesores($cedula,$cedulaNueva,$nombre,$apellido,$idPrioridad){
 	  		$result = $this->link->query("UPDATE profesores SET cedula=$cedulaNueva,nombre='$nombre',apellido='$apellido', id_prioridad = $idPrioridad WHERE cedula=$cedula");
 	  		return;

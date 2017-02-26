@@ -20,8 +20,6 @@ $(document).ready(function() {
 					var horas = $.parseJSON(data);
 					console.log(data);
 					horasACumplir = horas.horas_a_cumplir;
-					//debo hacer una forma de saber si ya tiene las horas cargadas (en cuyo caso
-					//horasRestantes =0 o si no las tiene, en cuyo caso horasRestantes=horasACumplir)
 					if (horas.disponibilidad==0) {
 						horasRestantes = horasACumplir;
 					}					
@@ -86,7 +84,13 @@ function cargarDisponibilidad(){
 		if (!validarData(data)) {
 			alert("Un dia contiene menos de 2 horas academicas consecutivas");
 		}else{
-			//aca debo implantar la parte que se pasara al servidor
+			$.post('../controller/disponibilidad.php', {
+				operacion: 'create',
+				data: data
+			}, function(data) {
+				console.log(data);
+				/*optional stuff to do after success */
+			});
 			alert("Guardado con exito");
 		}
 	}else if ($("#selector_profesores option:selected").val()==0){
