@@ -8,7 +8,7 @@ require($_SERVER['DOCUMENT_ROOT'].'/Horarios/Model/DBConnection.php');
 $link = DBConnection::connection();
 
 $arrayCabeceraTablas = [
-    "aulas" => '<table class="table table-bordered  table-hover">
+    "aulas" => '<table class="table table-bordered  table-hover table-condensed">
     				<tr class="success">
                         <th>No.</th>
                         <th>Nombre</th>
@@ -17,7 +17,7 @@ $arrayCabeceraTablas = [
                         <th>Editar</th>
                         <th>Borrar</th>
                     </tr>',
-    "materias" => '<table class="table table-bordered  table-hover">
+    "materias" => '<table class="table table-bordered  table-hover table-condensed">
 		                <tr class="success">
 		                    <th>Codigo</th>
 		                    <th>Asignatura</th>
@@ -29,7 +29,7 @@ $arrayCabeceraTablas = [
 		                    <th>Editar</th>
 		                    <th>Borrar</th>
 		                </tr>',
-	"profesores"=> '<table class="table table-bordered  table-hover">
+	"profesores"=> '<table class="table table-bordered  table-hover table-condensed">
 	                    <tr class="success">
 	                        <th>No.</th>
 	                        <th>Cedula</th>
@@ -39,7 +39,7 @@ $arrayCabeceraTablas = [
 	                        <th>Editar</th>
 	                        <th>Borrar</th>
 	                    </tr>',
-	"profesores_materias"=>'<table class="table table-bordered  table-hover">
+	"profesores_materias"=>'<table class="table table-bordered  table-hover table-condensed">
 			                    <tr class="success">
 			                        <th>Codigo</th>
 			                        <th>Asignatura</th>
