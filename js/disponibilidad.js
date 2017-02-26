@@ -2,6 +2,7 @@ var horasRestantes = 0;
 var horasACumplir;
 
 $(document).ready(function() {
+	$("#borrar_disponibilidad").hide();
 	//Obten la data de los profesores al cargar la pagina 
 	$.post("../controller/disponibilidad.php",{
 		operacion:"read"
@@ -17,22 +18,24 @@ $(document).ready(function() {
 					cedula: cedula
 				}, function(data) {
 					limpiarCeldas();
-					var horas = $.parseJSON(data);
-					console.log(data);
-					horasACumplir = horas.horas_a_cumplir;
-					if (horas.disponibilidad==0) {
+					var datos = $.parseJSON(data);
+					horasACumplir = datos.horas_a_cumplir;
+					if (datos.numero_registros==0) {
 						horasRestantes = horasACumplir;
-					}					
+					}else{
+						horasRestantes=0;
+						$("#borrar_disponibilidad").show();
+						llenarCeldas(datos.registros);
+					}			
 					$("#horas_a_cumplir").val(horasACumplir);
 					$("#horas_restantes").val(horasRestantes);
-					//Se debe cargar la disponibilidadque tenia el profesor
-					//en caso de tenerla, para luego ser editada 
 				});
 			}else{
 				limpiarCeldas();
 			}
 		});
 	});
+
 	//Si el selector esta en una option diferente a la default, se permite el cambio
 	//de color de las celdas al hacer click y se actualizan las horas_restantes
 	$("td").click(function(){
@@ -75,23 +78,25 @@ function limpiarCeldas() {
 	$("#tabla_horario tbody tr td").attr("bgcolor","#fff");
 	$("#horas_a_cumplir").val("");
 	$("#horas_restantes").val("");
+	$("#borrar_disponibilidad").hide();
 }
 
 //Esta funcion es llamada al presionar el boton de guardar
 function cargarDisponibilidad(){
 	if (horasRestantes==0 && $("#selector_profesores option:selected").val()!=0) {
-		var data = guardarData();
+		var data = codificarData();
 		if (!validarData(data)) {
 			alert("Un dia contiene menos de 2 horas academicas consecutivas");
 		}else{
+			var cedula = $("#selector_profesores option:selected").val();
 			$.post('../controller/disponibilidad.php', {
-				operacion: 'create',
+				operacion: 'create_update',
+				cedula:cedula,
 				data: data
 			}, function(data) {
-				console.log(data);
-				/*optional stuff to do after success */
-			});
-			alert("Guardado con exito");
+				alert("Guardado con exito");
+				location.reload();
+			});	
 		}
 	}else if ($("#selector_profesores option:selected").val()==0){
 		alert("No has seleccionado a un profesor");
@@ -102,7 +107,7 @@ function cargarDisponibilidad(){
 }
 
 //Esta funcion recoge la data seleccionada por el usuario y devuelve un array
-function guardarData(){
+function codificarData(){
 	var arrayData=[];
 	var tabla=document.getElementById("tabla_horario");
 	for (var j = 1; j < 7; j++) {		
@@ -160,9 +165,41 @@ function validarData(data){
 	return true;
 }
 
+//Esta funcion llena las celdas cuando existe algun registro guardado en la tabla
+//disponibilidad_profesores. Recibe un conjunto de registros equivalentes a lo 
+//encontrado en la DB
+function llenarCeldas(datos){
+	for (var k = 0; k < Object.keys(datos).length; k++) {
+		var tabla=document.getElementById("tabla_horario");
+		for (var j = 1; j < 7; j++) {		
+			for (var i = 1; i < 13; i++) {
+				if (datos[k].id_dia==j && datos[k].id_hora_inicio==i) {
+					for (var t = i; t < datos[k].id_hora_fin; t++) {
+						tabla.rows[t].cells[j].setAttribute("bgcolor","#5cb85c");
+					}
+				}	
+			}
+		}	
+		//console.log("Dia:"+datos[i].id_dia+",hora_inicio:"+datos[i].id_hora_inicio+",hora_fin:"+datos[i].id_hora_fin);
+	}
+	return;
+}
+
 //Notese que no puedo llamar directamente a mi funcion cargarDisponibilidad,
 //en cambio debe primero llamar a una jQuery
 $("#cargar_disponibilidad").click(function(){
 	cargarDisponibilidad();
-	//falta algo como recargar pagina?
+});
+
+//Esto se ejecuta solo si la persona seleccionada cuenta con disponibilidad 
+//previamente almacenada y borra dicha disponibilidad
+$("#borrar_disponibilidad").click(function(){
+	var cedula = $("#selector_profesores option:selected").val();
+	$.post('../controller/disponibilidad.php', {
+		operacion: 'delete',
+		cedula: cedula
+	}, function(data) {
+		alert("Borrado exitoso");
+		location.reload();
+	});	
 });
