@@ -2,7 +2,7 @@
 /**
  * Esta clase contiene metodos para leer/editar/crear/borrar
  * en la tabla "profesores_materias" de la DB
-  */
+ */
 class ProfesoresMateriasModel {
   	private $link;
 
