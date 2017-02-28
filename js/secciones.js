@@ -1,142 +1,59 @@
-// Add Record
-function addRecord() {
-    // get values
-    var numero_seccion = $("#numero_seccion").val();
-    numero_seccion = numero_seccion.trim();
-    var cantidad_alumnos = $("#cantidad_alumnos").val();
-    cantidad_alumnos = cantidad_alumnos.trim();
-    //var codigo = $("#codigo").val();
-    //codigo = codigo.trim();
-    var codigomateria = document.getElementById("materias").value;
-    alert(codigomateria);
-    var operacion = "create";
+var operacion;
 
+$(document).ready(function (){
+    read(); 
+    operacion="materias";
+    $.post("../controller/secciones_controller.php",{
+        operacion:operacion
+    }, function(data){
+        $("#selector_materias").html(data);
+    });
+});
 
-    if (numero_seccion == "") {
-        alert("numero_seccion field is required!");
-    }
-    else if (cantidad_alumnos == "") {
-        alert("cantidad_alumnos field is required!");
-    }
-   // else if (codigo == "") {
-   //     alert("codigo field is required!");
-   // }
-    else {
-        // Add record
-        $.post("../controller/secciones_controller.php", {
-            numero_seccion: numero_seccion,
-            cantidad_alumnos: cantidad_alumnos,
-            //codigo: codigo,
-            codigomateria: codigomateria,
-            operacion: operacion
-        }, function (data, status) {
-            // close the popup
-            $("#add_new_record_modal").modal("hide");
- 
-            // read records again
-            readRecords();
- 
-            // clear fields from the popup
-            $("#numero_seccion").val("");
-            $("#cantidad_alumnos").val("");
-
-            //$("#codigo").val("");
-        });
-    }
+function create() {
+    operacion="create";
+    var codigo = $("#selector_materias option:selected").val();
+    var cantidadSecciones = $("#cantidad_secciones").val().trim();
+    var cantidadAlumnos = $("#cantidad_alumnos").val().trim();
+    //Aca falta la validacion de que los campos sean correctos y 
+    //q el selector no sea el primero
+    $.post("../controller/secciones_controller.php",{      
+        codigo:codigo,
+        cantidad_secciones: cantidadSecciones,
+        cantidad_alumnos: cantidadAlumnos,
+        operacion: operacion
+    }, function (data, status) {
+        $("#add_new_record_modal").modal("hide");
+        $('#selector_materias > option[value=0]').attr('selected', 'selected');
+        $("#cantidad_secciones").val("");
+        $("#cantidad_alumnos").val("");
+        read();
+    });   
 }
 
-
-
-// READ records
-function readRecords() {
-    var operacion="read";
-    $.post("../controller/secciones_controller.php", {operacion: operacion}, function (data, status) {
+function read() {
+    operacion="read";
+    $.post("../controller/secciones_controller.php", {
+        operacion: operacion
+    }, function (data) {
         $(".records_content").html(data);
     });
 }
 
-//Este metodo es invocado al pulsar sobre el boton UPDATE para que los campos salgan 
-//con los valores que tenian
-function GetUserDetails(id) {
-    var operacion="details";
-    // Add User ID to the hidden field
-    $("#hidden_user_id").val(id);
-    $.post("../controller/secciones_controller.php", {
-            id: id,
-            operacion: operacion
-        },
-        function (data, status) {
-            // PARSE json data
-            var user = JSON.parse(data);
-            // Assign existing values to the modal popup fields
-            $("#update_first_name").val(user.Numero_Seccion);
-            $("#update_last_name").val(user.Cantidad_Alumnos);
-        }
-    );
-    // Open modal popup
-    $("#update_user_modal").modal("show");
-}
-
-//Este metodo es llamado cuando el usuario ya ha edita lo que deseaba y presiona el boton SAVE
-function UpdateUserDetails() {
-    var operacion="update";
-    // get values
-    var numero_seccion = $("#update_first_name").val();
-    numero_seccion = numero_seccion.trim();
-    var cantidad_alumnos = $("#update_last_name").val();
-    cantidad_alumnos = cantidad_alumnos.trim();
- 
-    if (numero_seccion == "") {
-        alert("numero_seccion field is required!");
-    }
-    else if (cantidad_alumnos == "") {
-        alert("cantidad_alumnos field is required!");
-    }
-    else {
-        // get hidden field value
-        var id = $("#hidden_user_id").val();
- 
-        // Update the details by requesting to the server using ajax
-        $.post("../controller/secciones_controller.php", {
-                id: id,
-                numero_seccion: numero_seccion,
-                cantidad_alumnos: cantidad_alumnos,
-                operacion: operacion
-            },
-            function (data, status) {
-                // hide modal popup
-                $("#update_user_modal").modal("hide");
-                // reload Users by using readRecords();
-                readRecords();
-            }
-        );
-    }
-}
-
-
-function DeleteUser(id) {
-    var operacion="delete";
-    var conf = confirm("Are you sure, do you really want to delete Seccion?");
+function deleteStuff(codigo,numeroSeccion) {
+    operacion="delete";
+    var conf = confirm("¿Estas seguro que deseas borrar esta seccion?");
     if (conf == true) {
         $.post("../controller/secciones_controller.php", {
-                id: id,
-                operacion: operacion
-            },
-            function (data, status) {
-                // reload Users by using readRecords();
-                readRecords();
-            }
-        );
+            codigo: codigo,
+            numero_seccion:numeroSeccion,
+            operacion: operacion
+        },function (data, status) {
+            read();
+        });
     }
 }
 
-
-$(document).ready(function () {
-    // READ records on page load
-    readRecords(); // calling function
-
-    var operacion="materias";
-    $.post("../controller/secciones_controller.php",{operacion:operacion},function(data){
-        $("#materias").html(data);
-    });
+$("#create_secciones_button").click(function(){
+    create();
 });
