@@ -44,13 +44,13 @@ class SeccionesModel{
   		return $dato;
   	}
 
-  	public function createSecciones($codigo,$numeroSeccionesACrear,$cantidadAlumnos){
+  	public function createSecciones($codigo,$cantidadSecciones,$cantidadAlumnos){
         $result = $this->link->query("SELECT * FROM secciones WHERE codigo=$codigo");
         $filas = $result->rowCount();
         if ($filas!=0) {
             $result = $this->link->query("DELETE FROM secciones WHERE codigo=$codigo");
         }
-        for ($i=1; $i<=$numeroSeccionesACrear; $i++) { 
+        for ($i=1; $i<=$cantidadSecciones; $i++) { 
             $result = $this->link->query("INSERT INTO secciones VALUES ($codigo,$i,$cantidadAlumnos)"); 
         }
 		return;
