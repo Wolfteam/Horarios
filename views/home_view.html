@@ -33,10 +33,46 @@
     </div>
 </nav>
 <!-- ======================== /.Navbar de la pag.======================== -->
-    <br><br><br>
-    <h1>NO IMPLEMENTADO</h1>
-    <br><br>
-    <h4><a href="../controller/home_1_controller.php">Planificacion Academica Departamento de Ingenieria de Sistemas</a></h4>
+<br><br><br>
+<!-- ======================== Contenido de la pag.======================== -->
+<div class="container">
+	<h2>Bienvenido(a)!</h2>	
+	<button class="btn btn-success" data-toggle="modal" data-target="#add_new_record_modal">Crear nuevo semestre</button>		
+	<div class="form-group">
+		<h4><a href="#">Planificacion Academica Departamento de Ingenieria de Sistemas</a></h4>
+		<h4><a href="#">Asignacion de Aulas Departamento de Ingenieria de Sistemas</a></h4>
+		<h4><a href="#">Programa de Horario Departamento de Ingenieria de Sistemas</a></h4>
+	</div>
+
+</div>
+<!-- ======================== /.Contenido de la pag.======================== -->
+
+<!-- ========================  Modal ADD/CREATE.======================== -->
+<div class="modal fade" id="add_new_record_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Nuevo semestre</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="nombre_semestre">Introduzca el nombre del semestre</label>
+                    <input type="text" id="nombre_semestre" placeholder="2016-E o 2017-I" class="form-control" maxlength="7" />
+                </div>
+                <div class="form-group">
+                    <label for="duracion_semestre">Introduzca las semanas de duracion del semestre</label>
+                    <input type="number" id="duracion_semestre" placeholder="18" class="form-control"/>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="create_semestre_button">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ========================  /.Modal ADD/CREATE.======================== -->
 
 
 <!-- ======================== Javascript======================== -->

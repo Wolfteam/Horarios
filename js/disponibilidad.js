@@ -95,6 +95,7 @@ function cargarDisponibilidad(){
 				data: data
 			}, function(data) {
 				alert("Guardado con exito");
+				limpiarCeldas();
 				location.reload();
 			});	
 		}
