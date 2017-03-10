@@ -12,7 +12,8 @@ class MateriasModel{
 
 	public function getMaterias () {
 		$materias=array();
-  		$result = $this->link->query("SELECT * FROM materias ORDER BY semestre ASC,codigo ASC");
+  		//$result = $this->link->query("SELECT * FROM materias ORDER BY semestre ASC,codigo ASC");
+  		$result = $this->link->query("SELECT m.codigo,m.asignatura,s.nombre_semestre,tam.nombre_tipo,c.nombre_carrera,m.horas_academicas_totales,m.horas_academicas_semanales FROM materias m INNER JOIN semestre s ON m.id_semestre=s.id_semestre INNER JOIN tipo_aula_materia tam ON m.id_tipo=tam.id_tipo INNER JOIN carreras c ON m.id_carrera=c.id_carrera ORDER BY s.id_semestre ASC,codigo ASC");
 		while ($rows = $result->fetch(PDO::FETCH_ASSOC)) {
 			$materias[]=$rows;
 		}
@@ -39,13 +40,13 @@ class MateriasModel{
 		return $dato;
 	}
 
-	public function setMaterias ($codigo,$codigoNuevo,$asignatura,$semestre,$horasAcademicasTotales,$horasAcademicasSemanales,$idTipo,$idCarrera) {
-		$result = $this->link->query("UPDATE materias SET codigo=$codigoNuevo, asignatura='$asignatura',semestre='$semestre', horas_academicas_totales = $horasAcademicasTotales,horas_academicas_semanales=$horasAcademicasSemanales,id_tipo=$idTipo, id_carrera = $idCarrera WHERE codigo=$codigo");
+	public function setMaterias ($codigo,$codigoNuevo,$asignatura,$idSemestre,$horasAcademicasTotales,$horasAcademicasSemanales,$idTipo,$idCarrera) {
+		$result = $this->link->query("UPDATE materias SET codigo=$codigoNuevo, asignatura='$asignatura',id_semestre='$idSemestre', horas_academicas_totales = $horasAcademicasTotales,horas_academicas_semanales=$horasAcademicasSemanales,id_tipo=$idTipo, id_carrera = $idCarrera WHERE codigo=$codigo");
   		return;
 	}
 
-	public function createMaterias ($codigo,$asignatura,$semestre,$horasAcademicasTotales,$horasAcademicasSemanales,$idTipo,$idCarrera) {
-		$result = $this->link->query("INSERT INTO materias (codigo,asignatura,semestre,horas_academicas_totales,horas_academicas_semanales,id_tipo,id_carrera) VALUES ($codigo,'$asignatura','$semestre',$horasAcademicasTotales,$horasAcademicasSemanales,$idTipo,$idCarrera)");
+	public function createMaterias ($codigo,$asignatura,$idSemestre,$horasAcademicasTotales,$horasAcademicasSemanales,$idTipo,$idCarrera) {
+		$result = $this->link->query("INSERT INTO materias (codigo,asignatura,id_semestre,horas_academicas_totales,horas_academicas_semanales,id_tipo,id_carrera) VALUES ($codigo,'$asignatura','$idSemestre',$horasAcademicasTotales,$horasAcademicasSemanales,$idTipo,$idCarrera)");
 		return;
 	}
 
