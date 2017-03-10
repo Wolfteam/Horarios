@@ -26,7 +26,13 @@ for ($i=0; $i < 4; $i++) {
 		echo $numeroRedondeado;
 	}
 	$numeroRedondeado=round($numero2);
-	echo $numeroRedondeado;
+	echo $numeroRedondeado."<br>"."<br>";
+
+	$k=4;
+	while ($k <= 3) {
+		echo "entre al while";
+		$k++;
+	}
  ?>
 </body>
 </html>
