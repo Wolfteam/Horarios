@@ -11,7 +11,7 @@
 	    $resultado = $materias->getMaterias();
 	    $data = "<option value='0'>Seleccione una materia</option>";
 	    foreach ($resultado as $key) {
-	    	$data.= "<option value=".$key['codigo'].">Semestre:".$key['semestre']." ".$key['asignatura']."</option>";
+	    	$data.= "<option value=".$key['codigo'].">Semestre:".$key['nombre_semestre']." ".$key['asignatura']."</option>";
 	    }
 	    echo $data;
 	}
@@ -38,11 +38,11 @@
 			foreach ($dato as $key) {
 			    $data.= "<tr>
 					<td>".$key['codigo']."</td>
-					<td>".$key['semestre']."</td>
+					<td>".$key['nombre_semestre']."</td>
 					<td>".$key['asignatura']."</td>
-					<td>".$key['numero_seccion']."</td>
+					<td>".$key['numero_secciones']."</td>
 					<td>".$key['cantidad_alumnos']."</td>
-					<td> <button onclick='deleteStuff(".$key['codigo'].",".$key['numero_seccion'].")' class='btn btn-danger'>Borrar</button> </td>
+					<td> <button onclick='deleteStuff(".$key['codigo'].")' class='btn btn-danger'>Borrar</button> </td>
 					</tr>";
 			}
 		} else {
@@ -52,9 +52,8 @@
 		echo $data;
 	}
 
-	if (isset($_POST['operacion']) && $_POST['operacion']=="delete" && isset($_POST['codigo']) && isset($_POST['numero_seccion']) && $_POST['codigo']!="" && $_POST['numero_seccion']!="") {
+	if (isset($_POST['operacion']) && $_POST['operacion']=="delete" && isset($_POST['codigo']) && $_POST['codigo']!="") {
 	    $codigo = $_POST['codigo'];
-	    $numeroSeccion = $_POST['numero_seccion'];
-	    $secciones->deleteSecciones($codigo,$numeroSeccion);
+	    $secciones->deleteSecciones($codigo);
 	}
 ?>
