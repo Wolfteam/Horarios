@@ -40,13 +40,12 @@ function read() {
     });
 }
 
-function deleteStuff(codigo,numeroSeccion) {
+function deleteStuff(codigo) {
     operacion="delete";
     var conf = confirm("¿Estas seguro que deseas borrar esta seccion?");
     if (conf == true) {
         $.post("../controller/secciones_controller.php", {
             codigo: codigo,
-            numero_seccion:numeroSeccion,
             operacion: operacion
         },function (data, status) {
             read();

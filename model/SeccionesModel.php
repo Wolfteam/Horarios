@@ -11,7 +11,8 @@ class SeccionesModel{
     }
 
     public function getSecciones($codigo=false){
-        $queryA="SELECT s.codigo, s.numero_seccion,s.cantidad_alumnos,m.asignatura,m.semestre FROM secciones s, materias m WHERE s.codigo=m.Codigo ORDER BY m.semestre,m.codigo ASC,s.numero_seccion";
+        //$queryA="SELECT s.codigo, s.numero_secciones,s.cantidad_alumnos,m.asignatura,m.id_semestre FROM secciones s, materias m WHERE s.codigo=m.Codigo ORDER BY m.id_semestre,m.codigo ASC,s.numero_secciones";
+        $queryA = "SELECT sec.codigo, sec.numero_secciones,sec.cantidad_alumnos,m.asignatura,m.id_semestre,sem.nombre_semestre FROM materias m INNER JOIN semestre sem ON m.id_semestre=sem.id_semestre INNER JOIN secciones sec ON m.codigo=sec.codigo ORDER BY m.id_semestre,m.codigo ASC";
         $queryB="SELECT * FROM secciones WHERE codigo=$codigo";  
         $secciones=[];
         if ($codigo!=false) {
@@ -37,33 +38,21 @@ class SeccionesModel{
         return $secciones;
     }
 
-    public function getCantidadAlumnos($codigo,$numeroSeccion){
-        $result = $this->link->query("SELECT cantidad_alumnos FROM secciones WHERE codigo=$codigo AND numero_seccion=$numeroSeccion");
+    public function getCantidadAlumnos($codigo){
+        $result = $this->link->query("SELECT cantidad_alumnos FROM secciones WHERE codigo=$codigo");
         $filas = $result->fetch(PDO::FETCH_ASSOC);
         $dato = $filas['cantidad_alumnos'];
         return $dato;
     }
 
     public function createSecciones($codigo,$cantidadSecciones,$cantidadAlumnos){
-        $result = $this->link->query("SELECT * FROM secciones WHERE codigo=$codigo");
-        $filas = $result->rowCount();
-        if ($filas!=0) {
-            $result = $this->link->query("DELETE FROM secciones WHERE codigo=$codigo");
-        }
-        for ($i=1; $i<=$cantidadSecciones; $i++) { 
-            $result = $this->link->query("INSERT INTO secciones VALUES ($codigo,$i,$cantidadAlumnos)"); 
-        }
+    	$result = $this->link->query("INSERT INTO secciones VALUES ($codigo,$cantidadSecciones,$cantidadAlumnos)");
         return;
     }
 
-    public function deleteSecciones($codigo=false,$numeroSeccion=false){
-        if ($codigo!=false && $numeroSeccion==false) {
-            $queryA="DELETE FROM secciones WHERE codigo=$codigo";
-            $result = $this->link->query($queryA);
-        }else{
-            $queryB="DELETE FROM secciones WHERE codigo=$codigo AND numero_seccion=$numeroSeccion";
-            $result = $this->link->query($queryB);
-        } 
+    public function deleteSecciones($codigo){
+        $queryA="DELETE FROM secciones WHERE codigo=$codigo";
+        $result = $this->link->query($queryA);     
         return;
     }
 

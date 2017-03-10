@@ -65,17 +65,17 @@ switch ($_POST['operacion']) {
 				}
 				break;
 			case '2'://Crear Materias
-				if (isset($_POST['codigo']) && isset($_POST['asignatura']) && isset($_POST['semestre']) && isset($_POST['horas_academicas_totales']) && isset($_POST['horas_academicas_semanales']) && isset($_POST['id_tipo']) && isset($_POST['id_carrera'])) {
+				if (isset($_POST['codigo']) && isset($_POST['asignatura']) && isset($_POST['id_semestre']) && isset($_POST['horas_academicas_totales']) && isset($_POST['horas_academicas_semanales']) && isset($_POST['id_tipo']) && isset($_POST['id_carrera'])) {
 
 					$codigo = $_POST['codigo'];
 				    $nombreMateria = $_POST['asignatura'];
-				    $semestre = $_POST['semestre'];
+				    $idSemestre = $_POST['id_semestre'];
 				    $horasAcademicasTotales = $_POST['horas_academicas_totales'];
 				    $horasAcademicasSemanales = $_POST['horas_academicas_semanales'];
 				 	$idTipo = $_POST['id_tipo'];
 				 	$idCarrera = $_POST['id_carrera'];
 				    $object = new MateriasModel($link);
-				    $object->createMaterias($codigo,$nombreMateria,$semestre,$horasAcademicasTotales,$horasAcademicasSemanales,$idTipo,$idCarrera);
+				    $object->createMaterias($codigo,$nombreMateria,$idSemestre,$horasAcademicasTotales,$horasAcademicasSemanales,$idTipo,$idCarrera);
 				}
 				break;
 			case '3'://Crear profesores
@@ -137,11 +137,11 @@ switch ($_POST['operacion']) {
 					    $data.= "<tr>
 							<td>".$key['codigo']."</td>
 							<td>".$key['asignatura']."</td>
-							<td>".$key['semestre']."</td>
+							<td>".$key['nombre_semestre']."</td>
 							<td>".$key['horas_academicas_totales']."</td>
 							<td>".$key['horas_academicas_semanales']."</td>
-							<td>".$key['id_tipo']."</td>
-							<td>".$key['id_carrera']."</td>
+							<td>".$key['nombre_tipo']."</td>
+							<td>".$key['nombre_carrera']."</td>
 							<td> <button onclick='getDetails(".$key['codigo'].")' class='btn btn-warning'>Editar</button> </td>
 							<td> <button onclick='deleteStuff(".$key['codigo'].")' class='btn btn-danger'>Borrar</button> </td>
 							</tr>";
@@ -183,7 +183,7 @@ switch ($_POST['operacion']) {
 				    $result = $obj->getMaterias();
 				    $data = "<option value='0'>Seleccione una materia</option>";
 				    foreach ($result as $key) {
-				    	$data.= "<option value=".$key['codigo'].">Semestre:".$key['semestre']." ".$key['asignatura']."</option>";
+				    	$data.= "<option value=".$key['codigo'].">Semestre:".$key['nombre_semestre']." ".$key['asignatura']."</option>";
 					}
 					echo $data;   
 				}else if (isset($_POST['mostrar']) && $_POST['mostrar']=="mostrar_profesores"){
@@ -203,7 +203,7 @@ switch ($_POST['operacion']) {
 						    $data.= "<tr>
 								<td>".$key['codigo']."</td>
 								<td>".$key['asignatura']."</td>
-								<td>".$key['semestre']."</td>
+								<td>".$key['nombre_semestre']."</td>
 								<td>".$key['nombre']."</td>
 								<td>".$key['apellido']."</td>
 								<td> <button onclick='getDetails(".$key['cedula'].",".$key['codigo'].")' class='btn btn-warning'>Editar</button> </td>
@@ -238,18 +238,18 @@ switch ($_POST['operacion']) {
 				}
 				break;
 			case '2'://Actualizar materias
-				if (isset($_POST['codigo']) && isset($_POST['codigo_nuevo']) && isset($_POST['asignatura']) && isset($_POST['semestre']) && isset($_POST['horas_academicas_totales']) && isset($_POST['horas_academicas_semanales']) && isset($_POST['id_tipo']) && isset($_POST['id_carrera'])) {	
+				if (isset($_POST['codigo']) && isset($_POST['codigo_nuevo']) && isset($_POST['asignatura']) && isset($_POST['id_semestre']) && isset($_POST['horas_academicas_totales']) && isset($_POST['horas_academicas_semanales']) && isset($_POST['id_tipo']) && isset($_POST['id_carrera'])) {	
 
 					$codigo = $_POST['codigo'];
 					$codigoNuevo = $_POST['codigo_nuevo'];
 				    $asignatura = $_POST['asignatura'];
-				    $semestre = $_POST['semestre'];
+				    $idSemestre = $_POST['id_semestre'];
 				    $horasAcademicasTotales = $_POST['horas_academicas_totales'];
 				    $horasAcademicasSemanales = $_POST['horas_academicas_semanales'];
 				 	$idTipo = $_POST['id_tipo'];
 				 	$idCarrera = $_POST['id_carrera'];
 				    $obj = new MateriasModel($link);			 
-				    $obj->setMaterias($codigo,$codigoNuevo,$asignatura,$semestre,
+				    $obj->setMaterias($codigo,$codigoNuevo,$asignatura,$idSemestre,
 				    	$horasAcademicasTotales,$horasAcademicasSemanales,$idTipo,$idCarrera);
 				}
 				break;

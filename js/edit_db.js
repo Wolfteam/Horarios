@@ -12,7 +12,7 @@ var idTipo;
 
 var codigo;
 var asignatura;
-var semestre;
+var idSemestre;
 var horasAcademicasTotales;
 var horasSemanales;
 var idCarrera;
@@ -99,12 +99,12 @@ function create() {
 		case "2"://Crear materias
 			codigo = $("#codigo").val().trim();
 		    asignatura = $("#nombre_asignatura").val().trim();
-		    semestre = $("#selector_semestre_materia option:selected").val();
+		    idSemestre = $("#selector_semestre_materia option:selected").val();
 		    horasAcademicasTotales = $("#horas_academicas_totales").val().trim();
 		    horasAcademicasSemanales = $("#horas_academicas_semanales").val().trim();
 		    idTipo = $("#selector_id_tipo_materia option:selected").val();
 		    idCarrera = $("#selector_carrera_materia option:selected").val();
-		    validate = validarCampos(selectorDB,codigo,asignatura,semestre,horasAcademicasTotales,
+		    validate = validarCampos(selectorDB,codigo,asignatura,idSemestre,horasAcademicasTotales,
 		    			horasAcademicasSemanales,idTipo,idCarrera);
 		    if (!validate) {
 		    	alert("Todos los campos son obligatorios");
@@ -112,7 +112,7 @@ function create() {
 				$.post(ruta, {
 		            codigo: codigo,
 		            asignatura: asignatura,
-		           	semestre: semestre,
+		           	id_semestre: idSemestre,
 		           	horas_academicas_totales:horasAcademicasTotales,
 		           	horas_academicas_semanales:horasAcademicasSemanales,
 		           	id_tipo:idTipo,
@@ -240,12 +240,12 @@ function update(){
 		case '2'://Update materias
 			var codigoNuevo = $("#update_codigo").val().trim();
 			asignatura = $("#update_nombre_asignatura").val().trim();
-		    semestre = $("#selector_update_semestre_materia option:selected").val();
+		    idSemestre = $("#selector_update_semestre_materia option:selected").val();
 		    horasAcademicasTotales = $("#update_horas_academicas_totales").val().trim(); 
 		    horasAcademicasSemanales = $("#update_horas_academicas_semanales").val().trim();
 		    idTipo = $("#selector_update_id_tipo_materia option:selected").val();
 		    idCarrera = $("#selector_update_carrera_materia option:selected").val();
-		    validate = validarCampos(selectorDB,asignatura,semestre,horasAcademicasTotales,
+		    validate = validarCampos(selectorDB,asignatura,idSemestre,horasAcademicasTotales,
 		    			horasAcademicasSemanales,idTipo,idCarrera);
 		    if (!validate) {
 		    	alert("Todos los campos son obligatorios");
@@ -255,7 +255,7 @@ function update(){
 	                codigo: codigo,
 	                codigo_nuevo:codigoNuevo,
 	                asignatura: asignatura,
-	                semestre: semestre,
+	                id_semestre: idSemestre,
 	                horas_academicas_totales: horasAcademicasTotales,
 	                horas_academicas_semanales: horasAcademicasSemanales,
 	                id_tipo: idTipo,
@@ -398,7 +398,7 @@ function getDetails(data1 = false,data2 = false){
 		        var materias = JSON.parse(data);
 	            $("#update_codigo").val(materias.codigo);
 	            $("#update_nombre_asignatura").val(materias.asignatura);
-	            $('#selector_update_semestre_materia > option[value='+materias.semestre+']').attr('selected', 'selected');
+	            $('#selector_update_semestre_materia > option[value='+materias.id_semestre+']').attr('selected', 'selected');
 	            $("#update_horas_academicas_totales").val(materias.horas_academicas_totales);
 	            $("#update_horas_academicas_semanales").val(materias.horas_academicas_semanales);
 	            $('#selector_update_id_tipo_materia > option[value='+materias.id_tipo+']').attr('selected', 'selected');

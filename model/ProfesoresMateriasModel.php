@@ -30,7 +30,8 @@ class ProfesoresMateriasModel {
 
 	public function getProfesoresMaterias3(){
 		$profesoresMaterias=array();
-  		$result = $this->link->query("SELECT m.codigo,m.asignatura, m.semestre, p.cedula ,p.nombre, p.apellido FROM materias m,profesores p,profesores_materias pm WHERE pm.cedula=p.cedula AND pm.codigo=m.codigo ORDER BY m.semestre,m.asignatura,p.nombre");
+  		//$result = $this->link->query("SELECT m.codigo,m.asignatura, m.semestre, p.cedula ,p.nombre, p.apellido FROM materias m,profesores p,profesores_materias pm WHERE pm.cedula=p.cedula AND pm.codigo=m.codigo ORDER BY m.semestre,m.asignatura,p.nombre");
+  		$result = $this->link->query("SELECT m.codigo,m.asignatura,s.nombre_semestre,p.cedula,p.nombre,p.apellido FROM materias m INNER JOIN semestre s ON m.id_semestre=s.id_semestre INNER JOIN profesores_materias pm ON m.codigo=pm.codigo INNER JOIN profesores p ON pm.cedula=p.cedula ORDER BY s.id_semestre,m.asignatura,p.nombre");
 		while ($rows = $result->fetch(PDO::FETCH_ASSOC)) {
 			$profesoresMaterias[]=$rows;
 		}
