@@ -10,10 +10,7 @@ $objHorarioProfesores = new HorarioProfesoresModel($link);
 $objProfesores = new ProfesoresModel($link);
 $objSecciones = new SeccionesModel($link);
 
-$objDisponibilidad->deleteAllDisponibilidadProfesores();
-$objSecciones->deleteAllSecciones();
-//Aca se deberia guardar la data sobre el nombreSemestre y su duracion
-//y llamar a los metodos de sus respectiva clase
+
 
 for ($prioridad=1; $prioridad<=6; $prioridad++) {
 	//Quienes son los prof. que tienen disponibilidad y la prioridad en la que me encuentro
