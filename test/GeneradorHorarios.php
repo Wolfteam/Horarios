@@ -1,5 +1,6 @@
 <?php
-//--crear un array para meter cada una de las horasACumplir de cada prof.
+//--crear un array para meter cada una de las horasACumplir de cada prof.,
+//quizas podria indexarlo de acuerdo a la ccedula? para luego actualizarlo
 for ($prioridad=1; $prioridad<=6 ; $prioridad++) { 
 	for ($semestre=3; $semestre<14 ; $semestre++) { 
 		//--pido todas las materias del semestre en el q toy parado, sino hay break;
@@ -31,8 +32,15 @@ for ($prioridad=1; $prioridad<=6 ; $prioridad++) {
 					//--sino devuelve true la funcion anterior, debo guardar el nombre del profesor
 					//cedula, asignatura,seccion que se intento asignar en un arrayErrores
 					//lo puedes hacer algo con un metodo push $data= $nombre.""$cedula...
-					//--si devuelve true nito actualizar las horasRestantes, 
-					//quitandole lashorasPorSemana que cree
+					//--y de paso llamar al metodo createRandomHorarios();
+					//el cual deberia devolver true en caso de meter al prof. en la
+					//hora que le toco y false en caso de no poder hacerlo
+					//puede que sea necesario almacenar en un array los datos
+					//del prof., materia etc para luego saber quien fue
+					//--al final, si alguna de las funciones devuelve true,
+					//nito actualizar las horasRestantes, 
+					//quitandole lashorasPorSemana que cree y guardandolo
+					//en el array de las horas a cumplir?
 				}
 			}
 
@@ -95,6 +103,8 @@ function validateChoqueHorario($cedula,$horaInicio,$horaFin,$dia){
 
 function getDiasDeDisponibiliadProfesores($arrayDisponibilidad,$arrayDias){	
 	$array=[];
+	//debo cambiar esto para que el array contenga los numeros de los dias
+	//y no los nombres
 	foreach ($arrayDias as $key) {
 		foreach ($arrayDisponibilidad as $key2) {
 			//el dia en el que estoy parado existe en el array disponibilidad?
@@ -105,8 +115,9 @@ function getDiasDeDisponibiliadProfesores($arrayDisponibilidad,$arrayDias){
 	//return el array;
 }
 
-//quizas no nite el arraydiasdisponibles y solo el numero de dias disponibles
+
 function createHorarioProfesor($cedula,$codigo,$semestre,$arrayDisponibilidad,$arrayDiasDisponibles,$arrayAulas,$horasRestantes,$horasPorSemana,$prioridadProfesor,$numeroSeccion,$tipoMateria){
+	//para que diablos nito las horasRestantes?
 	$horaInicialSeccion=0;
 	$horaFinalSeccion=0;
 	$aux=$horasPorSemana;
@@ -155,6 +166,51 @@ function createHorarioProfesor($cedula,$codigo,$semestre,$arrayDisponibilidad,$a
 		}
 		//si aux=0 entonces break;xq asigne la materia completa
 		//si aux!=horasPorSemana y aux>0 continue para cambiar de dia
+	}
+	//si aux!=0 retorna false
+	//sino utiliza alguna funcion que reciba el array de datos a guardar
+	//y retorna true;
+}
+//debo revisar lo de $horaFinalSeccion= $horaInicialSeccion + $horaPorSeccion;
+//xq no toy seguro si ta asignando bien la hora final
+//creo qu lo mismo aplica para la funcion anterior
+function createRandomHorario($cedula,$codigo,$semestre,$arrayAulas,$horasPorSemana,$numeroSeccion,$tipoMateria){
+	$horaInicialSeccion=0;
+	$horaFinalSeccion=0;
+	$aux=$horasPorSemana;
+	//--la materia es lab o teoria?
+	//si es teoria entonces $horasPorSeccion=round(horasPorSemana/2)
+	//sino $horasPorSeccion=horasPorSemana
+	for ($dia=1; $dia < 7 ; $dia++) {
+		$horaInicialSeccion=1;
+		$horaFinalSeccion= $horaInicialSeccion + $horaPorSeccion;
+		while (horaFinalSeccion <= 14) {
+			foreach ($arrayAulas as $key) {
+				//--validateAulas(horaInicio9,horaFin,dia,aula)
+				//si devuelve false break
+				//--validateChoqueSemestre(codigo,horaInicialSeccion,horaFinalSeccion,dia)
+				//si lo anterior te devuelve false break;
+				//--validateChoqueHorario(cedula,horaInicialSeccion,horaFinalSeccion,dia);
+				//si lo anterior te devuelve false break;
+				//--llegado a este punto guarda en un array  
+				//cedula,codigo,aula,horaInicioSeccion,HoraFinSeccion,
+				//numeroSeccion,dia en el que toy parado
+				//para luego generar la consulta a la DB
+				//--aux = aux - horaPorSeccion
+				//--horaPorSeccion=aux
+				//y break;
+			}
+			//si aux!=horasPorSemana y aux>0 break porque ya asigne una hora y falta
+			//la otra hora de la seccion;
+			//si aux=0 es xq ya asigne la seccion completa y break?
+			//--llegado a este punto es xq no pude asignar la horas y aulas
+			//y debo cambiar el valor de las horas a ver si consigo asignarla
+			//$horaInicialSeccion++; 
+			//--$horaFinalSeccion = horaInicial+$horasPorSeccion
+		}
+		//si aux=0 entonces break;xq asigne la materia completa
+		//si aux!=horasPorSemana y aux>0 has un continue y cambia de dia 
+		//creo q esto no es necesario
 	}
 	//si aux!=0 retorna false
 	//sino utiliza alguna funcion que reciba el array de datos a guardar
