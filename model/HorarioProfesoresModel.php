@@ -8,7 +8,7 @@ class HorarioProfesoresModel{
 	function __construct($link){
 		$this->link=$link;
 	}
-/*
+
 	public function getHorarioProfesores($cedula=false){
 		$queryA = "SELECT * FROM horario_profesores";
 		$queryB = "SELECT * FROM horario_profesores WHERE cedula=$cedula";
@@ -23,20 +23,56 @@ class HorarioProfesoresModel{
 		}
   		return $horarios;
 	}
-*/
-	public function getProfesoresConDisponbilidad($idPrioridad){
-		$profesores=[];
-		//SELECT campo_con_duplicados FROM tabla GROUP BY campo_con_duplicados
-		$query = "SELECT dp.cedula FROM profesores p, prioridad_profesor pp, disponibilidad_profesores dp WHERE p.cedula = dp.cedula AND p.id_prioridad = pp.id_prioridad AND p.id_prioridad=$idPrioridad GROUP BY dp.cedula";
+
+	public function getHorarioProfesoresByDiaAula($idDia,$idAula){
+		$query= "SELECT * from horario_profesores WHERE id_dia=$idDia AND id_aula=$idAula";
 		$result = $this->link->query($query);
-		foreach ($result as $key) {
-			$profesores[]=$key['cedula'];
+		while ($rows = $result->fetch(PDO::FETCH_ASSOC)) {
+			$horarioProfesores[]=$rows;
 		}
-		return $profesores;
+		return $horarioProfesores;
 	}
 
-	public function createHorarioProfesores($cedula,$codigo,$numeroSeccion,$idDia,$idHoraInicio,$idHoraFin,$idAula){
-		$query = "INSERT INTO horario_profesores VALUES($cedula,$codigo,$numeroSeccion,$idDia,$idHoraInicio,$idHoraFin,$idAula)";
+	public function getHorarioProfesoresByCedulaDia($cedula,$idDia){
+		$query= "SELECT * from horario_profesores WHERE cedula=$cedula AND id_dia=$idDia";
+		$result = $this->link->query($query);
+		while ($rows = $result->fetch(PDO::FETCH_ASSOC)) {
+			$horarioProfesores[]=$rows;
+		}
+		return $horarioProfesores;
+	}
+
+	public function getHorarioProfesoresBySemestreDia($idSemestre,$idDia){
+		$query = "SELECT hp.codigo,hp.id_hora_inicio,hp.id_hora_fin FROM horario_profesores hp INNER JOIN materias m on hp.codigo = m.codigo INNER JOIN semestre sem ON m.id_semestre = sem.id_semestre WHERE sem.id_semestre=$idSemestre AND hp.id_dia=$idDia";
+		$result = $this->link->query($query);
+		while ($rows = $result->fetch(PDO::FETCH_ASSOC)) {
+			$horarioProfesores[]=$rows;
+		}
+		return $horarioProfesores;		
+	}
+
+	public function getHorarioProfesoresByCodigoDia($codigo,$idDia){
+		$query = "SELECT * FROM horario_profesores WHERE codigo=$codigo AND id_dia=$idDia";
+		$result = $this->link->query($query);
+		while ($rows = $result->fetch(PDO::FETCH_ASSOC)) {
+			$horarioProfesores[]=$rows;
+		}
+		return $horarioProfesores;	
+	}
+
+	public function findHorarioProfesor($cedula,$idHoraInicio,$idHoraFin,$idDia){
+		$query = "SELECT * from horario_profesores WHERE cedula = $cedula AND id_hora_inicio = $idHoraInicio AND id_hora_fin = $idHoraFin AND id_dia=$idDia";
+		$result = $this->link->query($query);
+		$horarioProfesor = $result->fetch(PDO::FETCH_ASSOC);
+		if (count($horarioProfesor)>0) {
+			return true;
+		}
+		return false;
+	}
+
+	public function createHorarioProfesores($cedula,$codigo,$idAula,$idDia,$idHoraInicio,
+		$idHoraFin,$numeroSeccion){
+		$query = "INSERT INTO horario_profesores VALUES($cedula,$codigo,$idAula,$idDia,$idHoraInicio,$idHoraFin,$numeroSeccion)";
 		$result = $this->link->query($query);
 		return;
 	}

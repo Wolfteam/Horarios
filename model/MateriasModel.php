@@ -26,6 +26,15 @@ class MateriasModel{
   		return $materias;
 	}
 
+	public function getMateriasBySemestre($idSemestre){
+		$query = "SELECT m.codigo FROM materias m INNER JOIN semestre sem ON m.id_semestre=sem.id_semestre WHERE m.id_semestre=$idSemestre";
+		$result = $this->link->query($query);
+		while ($rows = $result->fetch(PDO::FETCH_ASSOC)) {
+			$materias[]=$rows;
+		}
+		return $materias;		
+	}
+
 	public function getHorasSemanales($codigo){
 		$result = $this->link->query("SELECT horas_academicas_semanales FROM materias WHERE codigo=$codigo");
 		$row = $result->fetch(PDO::FETCH_ASSOC);

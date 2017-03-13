@@ -27,21 +27,25 @@ class SeccionesModel{
     }
 
     public function getNumeroSeccionesCreadas($codigo){
-        $numeroSeccionesCreadas=0;
-        $result = $this->link->query("SELECT * FROM secciones WHERE codigo=$codigo");
-        //no se si usar rowCount me genere algun problema
-        $filas = $result->rowCount();
-        if ($filas!=0){
-            $numeroSeccionesCreadas=$filas;
-            return $numeroSeccionesCreadas;
-        }
-        return $secciones;
+        //SELECT COUNT(*) FROM secciones
+        $result = $this->link->query("SELECT numero_secciones FROM secciones WHERE codigo=$codigo");
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        if (count($row)==0) {
+        	$numeroSeccionesCreadas=0;
+        }else{
+			$numeroSeccionesCreadas = $row['numero_secciones'];
+        }  
+        return $numeroSeccionesCreadas;
     }
 
     public function getCantidadAlumnos($codigo){
         $result = $this->link->query("SELECT cantidad_alumnos FROM secciones WHERE codigo=$codigo");
-        $filas = $result->fetch(PDO::FETCH_ASSOC);
-        $dato = $filas['cantidad_alumnos'];
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        if (count($row)==0) {
+        	$dato=0;
+        }else{
+        	$dato = $row['cantidad_alumnos'];
+        }     
         return $dato;
     }
 

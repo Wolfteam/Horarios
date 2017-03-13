@@ -34,6 +34,14 @@ class AulasModel{
   		return $aulas;
 	}
 
+	public function getAulasByTipoCapacidad($idTipo,$capcidad){
+  		$result = $this->link->query("SELECT * FROM aulas WHERE id_tipo=$idTipo AND capacidad>=$capacidad");
+  		while ($rows = $result->fetch(PDO::FETCH_ASSOC)) {
+			$aulas[]=$rows;
+		}
+  		return $aulas;
+	}
+
 	public function setAulas ($idAula,$nombreAula,$capacidad,$idTipo) {
 		$result = $this->link->query("UPDATE aulas SET nombre_aula='$nombreAula',capacidad=$capacidad, id_tipo = $idTipo WHERE id_aula=$idAula");
   		return;
