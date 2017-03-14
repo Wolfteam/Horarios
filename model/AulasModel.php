@@ -34,8 +34,9 @@ class AulasModel{
   		return $aulas;
 	}
 
-	public function getAulasByTipoCapacidad($idTipo,$capcidad){
-  		$result = $this->link->query("SELECT * FROM aulas WHERE id_tipo=$idTipo AND capacidad>=$capacidad");
+	public function getAulasByTipoCapacidad($idTipo,$capacidad){
+		$aulas = [];
+  		$result = $this->link->query("SELECT a.id_aula FROM aulas a WHERE id_tipo=$idTipo AND capacidad>=$capacidad");
   		while ($rows = $result->fetch(PDO::FETCH_ASSOC)) {
 			$aulas[]=$rows;
 		}

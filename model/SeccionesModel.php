@@ -23,6 +23,7 @@ class SeccionesModel{
         while ($rows = $result->fetch(PDO::FETCH_ASSOC)) {
             $secciones[]=$rows;
         }
+        $result->closeCursor();
         return $secciones;
     }
 
@@ -34,7 +35,8 @@ class SeccionesModel{
         	$numeroSeccionesCreadas=0;
         }else{
 			$numeroSeccionesCreadas = $row['numero_secciones'];
-        }  
+        }
+        $result->closeCursor();
         return $numeroSeccionesCreadas;
     }
 
@@ -45,23 +47,27 @@ class SeccionesModel{
         	$dato=0;
         }else{
         	$dato = $row['cantidad_alumnos'];
-        }     
+        }
+        $result->closeCursor();
         return $dato;
     }
 
     public function createSecciones($codigo,$cantidadSecciones,$cantidadAlumnos){
     	$result = $this->link->query("INSERT INTO secciones VALUES ($codigo,$cantidadSecciones,$cantidadAlumnos)");
+    	$result->closeCursor();
         return;
     }
 
     public function deleteSecciones($codigo){
         $queryA="DELETE FROM secciones WHERE codigo=$codigo";
-        $result = $this->link->query($queryA);     
+        $result = $this->link->query($queryA);
+        $result->closeCursor();    
         return;
     }
 
     public function deleteAllSecciones(){
         $result = $this->link->query("TRUNCATE secciones");
+        $result->closeCursor();
         return;
     }     
 }  

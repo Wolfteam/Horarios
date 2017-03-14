@@ -17,21 +17,25 @@ class MateriasModel{
 		while ($rows = $result->fetch(PDO::FETCH_ASSOC)) {
 			$materias[]=$rows;
 		}
+		$result->closeCursor();
 		return $materias;
 	}
 
 	public function getMaterias2 ($codigo) {
   		$result = $this->link->query("SELECT * FROM materias WHERE codigo=$codigo");
   		$materias = $result->fetch(PDO::FETCH_ASSOC);
+  		$result->closeCursor();
   		return $materias;
 	}
 
 	public function getMateriasBySemestre($idSemestre){
+		$materias=[];
 		$query = "SELECT m.codigo FROM materias m INNER JOIN semestre sem ON m.id_semestre=sem.id_semestre WHERE m.id_semestre=$idSemestre";
 		$result = $this->link->query($query);
 		while ($rows = $result->fetch(PDO::FETCH_ASSOC)) {
 			$materias[]=$rows;
 		}
+		$result->closeCursor();
 		return $materias;		
 	}
 
@@ -39,6 +43,7 @@ class MateriasModel{
 		$result = $this->link->query("SELECT horas_academicas_semanales FROM materias WHERE codigo=$codigo");
 		$row = $result->fetch(PDO::FETCH_ASSOC);
 		$dato= $row['horas_academicas_semanales'];
+		$result->closeCursor();
 		return $dato;
 	}
 
@@ -46,21 +51,25 @@ class MateriasModel{
 		$result = $this->link->query("SELECT id_tipo FROM materias WHERE codigo=$codigo");
 		$fila = $result->fetch(PDO::FETCH_ASSOC);
 		$dato= $fila['id_tipo'];
+		$result->closeCursor();
 		return $dato;
 	}
 
 	public function setMaterias ($codigo,$codigoNuevo,$asignatura,$idSemestre,$horasAcademicasTotales,$horasAcademicasSemanales,$idTipo,$idCarrera) {
 		$result = $this->link->query("UPDATE materias SET codigo=$codigoNuevo, asignatura='$asignatura',id_semestre='$idSemestre', horas_academicas_totales = $horasAcademicasTotales,horas_academicas_semanales=$horasAcademicasSemanales,id_tipo=$idTipo, id_carrera = $idCarrera WHERE codigo=$codigo");
+		$result->closeCursor();
   		return;
 	}
 
 	public function createMaterias ($codigo,$asignatura,$idSemestre,$horasAcademicasTotales,$horasAcademicasSemanales,$idTipo,$idCarrera) {
 		$result = $this->link->query("INSERT INTO materias (codigo,asignatura,id_semestre,horas_academicas_totales,horas_academicas_semanales,id_tipo,id_carrera) VALUES ($codigo,'$asignatura','$idSemestre',$horasAcademicasTotales,$horasAcademicasSemanales,$idTipo,$idCarrera)");
+		$result->closeCursor();
 		return;
 	}
 
 	public function deleteMaterias ($codigo) {
 		$result = $this->link->query("DELETE FROM materias WHERE codigo='$codigo'");
+		$result->closeCursor();
 		return;
 	}
 }
