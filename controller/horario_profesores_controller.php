@@ -35,24 +35,24 @@ for ($idPrioridad=1; $idPrioridad<=6; $idPrioridad++) {
 			$codigo = $keyMateria['codigo'];
 			$numeroSecciones = $objSecciones->getNumeroSeccionesCreadas($codigo);
 			$capacidad = $objSecciones->getCantidadAlumnos($codigo);
+			error_log("codigo:".$codigo.",numeroSecciones:".$numeroSecciones);
 			if ($numeroSecciones == 0) {
 				continue;
 			}
 			$idTipoMateria = $objMaterias->getTipoMateria($codigo);
 			$horasPorSemana = $objMaterias->getHorasSemanales($codigo);
 			$arrayProfesores = $objDisponibilidadProfesores->findProfesoresByDisponibilidadPrioridadMateria($idPrioridad,$codigo);
-			//error_log("idPrioridad:".$idPrioridad.",codigo:".$codigo);
-			//error_log(print_r($arrayProfesores,true));
 			if (count($arrayProfesores)==0) {
 				break;
-			}
-			for ($i=0; $i <=$numeroSecciones; $i++) { 
-				$arraySecciones[]=$i;
 			}
 			$numeroSeccion=1;
 			//for ($i=1; $i<=$numeroSecciones; $i++) {
 			for ($i=$numeroSecciones; $i>0; $i--) {
-				foreach ($arrayProfesores as $keyCedula) {
+				foreach ($arrayProfesores as $keyCedula) {	
+					if ($numeroSecciones==0) {
+						$i=0;
+						break;
+					}
 					$cedula = $keyCedula['cedula'];
 					$horasACumplir = $arrayHorasACumplir[$cedula];
 					$horasAsignadas = getHorasAsignadas($cedula,$objHorarioProfesores);
@@ -65,9 +65,6 @@ for ($idPrioridad=1; $idPrioridad<=6; $idPrioridad++) {
 					$arrayIdDiasDisponibles = getDiasDisponibiliadProfesor($arrayDisponibilidad);
 					$arrayIdAulas = $objAulas->getAulasByTipoCapacidad($idTipoMateria,$capacidad);
 					if (count($arrayIdAulas)==0) {
-						break;
-					}
-					if ($numeroSeccion>$i) {
 						break;
 					}
 /*
@@ -87,19 +84,19 @@ for ($idPrioridad=1; $idPrioridad<=6; $idPrioridad++) {
 							//debo guardar los datos del prof q no pude asignar
 							break;
 						}else{
-							$horasRestantes = $horasRestantes - $horasPorSemana;
-							$arrayHorasACumplir[$cedula] = $horasRestantes;
-							
+							//$horasRestantes = $horasRestantes - $horasPorSemana;
+							//$arrayHorasACumplir[$cedula] = $horasRestantes;
+							$numeroSecciones--;
+							$numeroSeccion++;
+							error_log("Asignado de forma normal.cedula:".$cedula.",horasACumplir:".$arrayHorasACumplir[$cedula].",horasAsignadas:".$horasAsignadas.",horasRestantes:".$horasRestantes);
 						}
 					}else{
-						$horasRestantes = $horasRestantes - $horasPorSemana;
-						$arrayHorasACumplir[$cedula] = $horasRestantes;
-						
-						error_log("cedula:".$cedula.",horasACumplir:".$arrayHorasACumplir[$cedula].",horasAsignadas:".$horasAsignadas.",horasRestantes:".$horasRestantes);
+						//$horasRestantes = $horasRestantes - $horasPorSemana;
+						//$arrayHorasACumplir[$cedula] = $horasRestantes;
+						$numeroSecciones--;
+						$numeroSeccion++;
+						error_log("Asignado de forma random.cedula:".$cedula.",horasACumplir:".$arrayHorasACumplir[$cedula].",horasAsignadas:".$horasAsignadas.",horasRestantes:".$horasRestantes);
 					}
-				}
-				if ($numeroSeccion == $numeroSecciones) {
-					break;
 				}
 			}
 		}
