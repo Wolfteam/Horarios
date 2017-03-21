@@ -39,6 +39,13 @@ class SeccionesModel{
         $result->closeCursor();
         return $numeroSeccionesCreadas;
     }
+    public function getAllNumeroSeccionesCreadas(){
+    	$result = $this->link->query("SELECT codigo,numero_secciones FROM secciones");
+    	$secciones = $result->fetchAll(PDO::FETCH_ASSOC);
+    	$secciones = array_column($secciones,'numero_secciones','codigo');
+    	$result->closeCursor();
+    	return $secciones;
+    }
 
     public function getCantidadAlumnos($codigo){
         $result = $this->link->query("SELECT cantidad_alumnos FROM secciones WHERE codigo=$codigo");

@@ -1,6 +1,6 @@
 <?php  
 /**
- * 
+ * Esta clase contiene metodos que permiten sobre todo leer la tabla horario_profesores.
  */
 class HorarioProfesoresModel{
 	private $link;
@@ -91,5 +91,11 @@ class HorarioProfesoresModel{
 		return;
 	}
 	
+	public function deleteAllHorarioProfesores(){
+		$query = "TRUNCATE horario_profesores";
+		$result = $this->link->query($query);
+		$result->closeCursor();
+		return;
+	}
 }
 ?>
