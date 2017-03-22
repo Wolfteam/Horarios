@@ -41,6 +41,15 @@ class ProfesoresModel{
 		return $horasACumplir;	  		
   	}
 
+  	public function getAllHorasACumplir(){
+  		$query = "SELECT p.cedula,pp.horas_a_cumplir FROM profesores p INNER JOIN prioridad_profesor pp ON p.id_prioridad=pp.id_prioridad";
+  		$result = $this->link->query($query);
+  		$horasACumplirProfesores = $result->fetchAll(PDO::FETCH_ASSOC);
+  		//Notese lo util que es array_column :D
+  		$horasACumplirProfesores = array_column($horasACumplirProfesores,'horas_a_cumplir','cedula');
+  		return $horasACumplirProfesores;
+  	}
+
   	public function setProfesores($cedula,$cedulaNueva,$nombre,$apellido,$idPrioridad){
 		$result = $this->link->query("UPDATE profesores SET cedula=$cedulaNueva,nombre='$nombre',apellido='$apellido', id_prioridad = $idPrioridad WHERE cedula=$cedula");
 		return;

@@ -29,7 +29,7 @@
 		                        <th >Codigo</th>
 		                        <th >Semestre</th>
 		                        <th >Asignatura</th>    
-		                        <th >Numero Seccion</th>
+		                        <th >Numero de Secciones</th>
 		                        <th >Cantidad Alumnos</th>                            
 		                        <th >Borrar</th>
 		                    </tr>';

@@ -23,41 +23,58 @@ class SeccionesModel{
         while ($rows = $result->fetch(PDO::FETCH_ASSOC)) {
             $secciones[]=$rows;
         }
+        $result->closeCursor();
         return $secciones;
     }
 
     public function getNumeroSeccionesCreadas($codigo){
-        $numeroSeccionesCreadas=0;
-        $result = $this->link->query("SELECT * FROM secciones WHERE codigo=$codigo");
-        //no se si usar rowCount me genere algun problema
-        $filas = $result->rowCount();
-        if ($filas!=0){
-            $numeroSeccionesCreadas=$filas;
-            return $numeroSeccionesCreadas;
+        //SELECT COUNT(*) FROM secciones
+        $result = $this->link->query("SELECT numero_secciones FROM secciones WHERE codigo=$codigo");
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        if (count($row)==0) {
+        	$numeroSeccionesCreadas=0;
+        }else{
+			$numeroSeccionesCreadas = $row['numero_secciones'];
         }
-        return $secciones;
+        $result->closeCursor();
+        return $numeroSeccionesCreadas;
+    }
+    public function getAllNumeroSeccionesCreadas(){
+    	$result = $this->link->query("SELECT codigo,numero_secciones FROM secciones");
+    	$secciones = $result->fetchAll(PDO::FETCH_ASSOC);
+    	$secciones = array_column($secciones,'numero_secciones','codigo');
+    	$result->closeCursor();
+    	return $secciones;
     }
 
     public function getCantidadAlumnos($codigo){
         $result = $this->link->query("SELECT cantidad_alumnos FROM secciones WHERE codigo=$codigo");
-        $filas = $result->fetch(PDO::FETCH_ASSOC);
-        $dato = $filas['cantidad_alumnos'];
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        if (count($row)==0) {
+        	$dato=0;
+        }else{
+        	$dato = $row['cantidad_alumnos'];
+        }
+        $result->closeCursor();
         return $dato;
     }
 
     public function createSecciones($codigo,$cantidadSecciones,$cantidadAlumnos){
     	$result = $this->link->query("INSERT INTO secciones VALUES ($codigo,$cantidadSecciones,$cantidadAlumnos)");
+    	$result->closeCursor();
         return;
     }
 
     public function deleteSecciones($codigo){
         $queryA="DELETE FROM secciones WHERE codigo=$codigo";
-        $result = $this->link->query($queryA);     
+        $result = $this->link->query($queryA);
+        $result->closeCursor();    
         return;
     }
 
     public function deleteAllSecciones(){
         $result = $this->link->query("TRUNCATE secciones");
+        $result->closeCursor();
         return;
     }     
 }  
