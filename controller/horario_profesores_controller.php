@@ -17,18 +17,26 @@ $objMaterias = new MateriasModel($link);
 $objProfesores = new ProfesoresModel($link);
 $objSecciones = new SeccionesModel($link);
 
-//debo ver como modifico lo que contiene el array
+
 $arrayHorasACumplir = $objProfesores->getAllHorasACumplir();
 $arraySecciones = $objSecciones->getAllNumeroSeccionesCreadas();
+//Notese el uso de array keys el cual devuelve un array con las keys, ej ([0] => 45531,[1] => 43258)
+//Con el uso de array_fill_keys, lleno el array anterior con puros "1",ej ([45531] => 1,[43258] => 1).
+//Este nuevo array sirve como puntero, para saber en que seccion voy al irlas asignando.
+$arrayIndexSecciones = array_fill_keys(array_keys($arraySecciones),1);
+
 //quizas esto de aca no sea necesario
 $objHorarioProfesores->deleteAllHorarioProfesores();
 
 //todo:
-//		Si nando q es MT se asigna primero a transmision cuando se asigne a margarita q es DE
-//		repetira las mismas secciones
-//		Revisar detenidamente la creacion de horarios tanto nomral como random
-//		closeCursor a todo
-//		Documentar todas las funciones
+//		--Revisar detenidamente la creacion de horarios tanto nomral como random
+//		--closeCursor a todo
+//		--Documentar todas las funciones
+//		--Si no se puede asignar a alguien se debe mostrar una especie de log de las 
+//		personas que no se pudieron asignar a la materia x
+//		--Cuando asignas la seccion sea de forma normal o random, haces siempre lo mismo
+//		crea una funcion que tome esos datos
+//		--Si un profesor tiene una disponibilidad asignada y le cambias su prioridad q deberia pasar?
 for ($idPrioridad=1; $idPrioridad<=6; $idPrioridad++) {
 	for ($idSemestre=3; $idSemestre<=14; $idSemestre++) { 
 		$arrayMaterias = $objMaterias->getMateriasBySemestre($idSemestre);
@@ -37,7 +45,10 @@ for ($idPrioridad=1; $idPrioridad<=6; $idPrioridad++) {
 		}
 		foreach ($arrayMaterias as $keyMateria) {
 			$codigo = $keyMateria['codigo'];
-			$numeroSecciones = $objSecciones->getNumeroSeccionesCreadas($codigo);
+			if (!isset($arraySecciones[$codigo])) {
+				continue;
+			}
+			$numeroSecciones = $arraySecciones[$codigo];
 			$capacidad = $objSecciones->getCantidadAlumnos($codigo);
 			if ($numeroSecciones == 0) {
 				continue;
@@ -48,7 +59,7 @@ for ($idPrioridad=1; $idPrioridad<=6; $idPrioridad++) {
 			if (count($arrayProfesores)==0) {
 				break;
 			}
-			$numeroSeccion=1;
+			$numeroSeccion = $arrayIndexSecciones[$codigo];
 			for ($i=$numeroSecciones; $i>0; $i--) {
 				foreach ($arrayProfesores as $keyCedula) {	
 					if ($numeroSecciones==0) {
@@ -72,6 +83,10 @@ for ($idPrioridad=1; $idPrioridad<=6; $idPrioridad++) {
 					$resultA = createHorarioProfesor($cedula,$codigo,$idSemestre,$idTipoMateria,$horasPorSemana,$numeroSeccion,$arrayDisponibilidad,$arrayIdDiasDisponibles,
 						$arrayIdAulas,$objHorarioProfesores);
 					if (!$resultA) {
+						if ($idPrioridad < 6) {
+							//Creo que solo los DE se les puede asignar un horario random
+							break;
+						}
 						//debo guardar los datos del prof q no pude asignar
 						$resultB = createRandomHorarioProfesor($cedula,$codigo,$idSemestre,
 							$idTipoMateria,$horasPorSemana,$numeroSeccion,$arrayIdAulas,
@@ -82,11 +97,15 @@ for ($idPrioridad=1; $idPrioridad<=6; $idPrioridad++) {
 						}else{
 							$numeroSecciones--;
 							$numeroSeccion++;
+							$arraySecciones[$codigo] = $numeroSecciones;
+							$arrayIndexSecciones[$codigo] = $numeroSeccion;
 							error_log("Asignado de forma random.cedula:".$cedula.",horasACumplir:".$arrayHorasACumplir[$cedula].",horasAsignadas:".$horasAsignadas.",horasRestantes:".$horasRestantes);
 						}
 					}else{
 						$numeroSecciones--;
 						$numeroSeccion++;
+						$arraySecciones[$codigo] = $numeroSecciones;
+						$arrayIndexSecciones[$codigo] = $numeroSeccion;
 						error_log("Asignado de forma normal.cedula:".$cedula.",horasACumplir:".$arrayHorasACumplir[$cedula].",horasAsignadas:".$horasAsignadas.",horasRestantes:".$horasRestantes);
 					}
 				}
@@ -97,8 +116,8 @@ for ($idPrioridad=1; $idPrioridad<=6; $idPrioridad++) {
 
 /**
  * Esta funcion genera un array con los ids de los dias que tiene disponible.
- * @param  [Array] $arrayDisponibilidad [Array de disponibilidad del profesor]
- * @return [Array] $arrayIdDias      	[Array con los ids de los dias disponibles]
+ * @param  Array $arrayDisponibilidad 	Array de disponibilidad del profesor
+ * @return Array $arrayIdDias      	  	Array con los ids de los dias disponibles
  */
 function getDiasDisponibiliadProfesor($arrayDisponibilidad){
 	$arrayIdDias=[];
@@ -115,9 +134,9 @@ function getDiasDisponibiliadProfesor($arrayDisponibilidad){
 
 /**
  * Esta funcion calcula las horas ya asignadas que tiene un profesor.
- * @param  [Integer] $cedula               	[Cedula del profesor]
- * @param  [Object] $objHorarioProfesores 	[Objeto para acceder a la clase]
- * @return [Integer] $horasAsignadas      	[Horas asignadas del profesor]
+ * @param  Integer $cedula               	Cedula del profesor
+ * @param  Object  $objHorarioProfesores 	Objeto para acceder a la clase
+ * @return Integer $horasAsignadas      	Horas asignadas del profesor
  */
 function getHorasAsignadas($cedula,$objHorarioProfesores){
 	$horasAsignadas=0;
@@ -131,10 +150,10 @@ function getHorasAsignadas($cedula,$objHorarioProfesores){
 
 /**
  * Esta funcion calcula cuantas horas debe tener la seccion de una materia.
- * @param  [Integer] $horasPorSemana  [Horas por semana de una materia]
- * @param  [Integer] $diasDisponibles [Numero de dias disponibles del profesor]
- * @param  [Integer] $idTipoMateria   [Id del tipo de materia]
- * @return [Integer] $horasPorSeccion [Numero de horas por seccion de una materia]
+ * @param  Integer $horasPorSemana  	Horas por semana de una materia
+ * @param  Integer $diasDisponibles 	Numero de dias disponibles del profesor
+ * @param  Integer $idTipoMateria   	Id del tipo de materia
+ * @return Integer $horasPorSeccion 	Numero de horas por seccion de una materia
  */
 function setHorasPorSeccion($horasPorSemana,$diasDisponibles,$idTipoMateria){
 	if ($diasDisponibles>=2 && $idTipoMateria==1) {
@@ -150,13 +169,18 @@ function setHorasPorSeccion($horasPorSemana,$diasDisponibles,$idTipoMateria){
  * Una hora no es valida cuando alguno de los datos da negativo y la otra da positiva.
  * Si alguna da cero, es valida.
  * Si ambas dan negativa es valida.
- * @param  [Integer] $idHoraInicioDB [Id de la hora de inicio almacenada en la DB]
- * @param  [Integer] $idHoraFinDB    [Id de la hora de fin almacenada en la DB]
- * @param  [Integer] $idHoraInicio   [Id de la hora de inicio]
- * @param  [Integer] $idHoraFin      [Id de la hora de fin]
- * @return [Boolean]                 [True si las horas dadas validas.]
+ * Agregue otra validacion para casos cuando una materia comienza seguida de otra.
+ * debe ser testeado
+ * @param  Integer $idHoraInicioDB 	Id de la hora de inicio almacenada en la DB
+ * @param  Integer $idHoraFinDB    	Id de la hora de fin almacenada en la DB
+ * @param  Integer $idHoraInicio   	Id de la hora de inicio
+ * @param  Integer $idHoraFin      	Id de la hora de fin
+ * @return Boolean                 	True si las horas dadas validas.
  */
 function validateHoras($idHoraInicioDB,$idHoraFinDB,$idHoraInicio,$idHoraFin){
+	if ($idHoraFinDB == $idHoraInicio) {
+		return true;
+	}
 	$dato1 = $idHoraFinDB - $idHoraInicio;
 	$dato2 = $idHoraInicioDB - $idHoraFin;
 	if (($dato1>=0 && $dato2<0) || ($dato1<0 && $dato2>=0)) {
@@ -168,12 +192,12 @@ function validateHoras($idHoraInicioDB,$idHoraFinDB,$idHoraInicio,$idHoraFin){
 /**
  * Esta funcion valida de que no este ocupada una cierta aula 
  * a una cierta hora, en un cierto dia.
- * @param  [Integer] $idHoraInicio         	[Id de la hora de inicio]
- * @param  [Integer] $idHoraFin            	[Id de la hora de fin]
- * @param  [Integer] $idDia                	[Id del dia]
- * @param  [Integer] $idAula               	[Id del aula]
- * @param  [Object] $objHorarioProfesores 	[Objeto para acceder a la clase]
- * @return [Boolean]                       	[True en caso de no estar el aula ocupada]
+ * @param  Integer $idHoraInicio         	Id de la hora de inicio
+ * @param  Integer $idHoraFin            	Id de la hora de fin
+ * @param  Integer $idDia                	Id del dia
+ * @param  Integer $idAula               	Id del aula
+ * @param  Object $objHorarioProfesores 	Objeto para acceder a la clase
+ * @return Boolean                       	True en caso de no estar el aula ocupada
  */
 function validateChoqueAula($idHoraInicio,$idHoraFin,$idDia,$idAula,$objHorarioProfesores){
 	$arrayRegistros = $objHorarioProfesores->getHorarioProfesoresByDiaAula($idDia,$idAula);
@@ -191,15 +215,21 @@ function validateChoqueAula($idHoraInicio,$idHoraFin,$idDia,$idAula,$objHorarioP
 /**
  * Esta funcion valida que no existan materias del mismo semestre en el mismo dia 
  * y a la misma hora que coincidan con las que se pasan en los parametros.
- * @param  [Integer] $codigo               	[Codigo de la materia]
- * @param  [Integer] $idSemestre           	[Id del semestre]
- * @param  [Integer] $idHoraInicio         	[Id de la hora de inicio]
- * @param  [Integer] $idHoraFin            	[Id de la hora de fin]
- * @param  [Integer] $idDia                	[Id del dia]
- * @param  [Object] $objHorarioProfesores 	[Objeto para acceder a la clase]
- * @return [Boolean]                       	[True en caso de no existir choque de semestre]
+ * Si una materia es electiva, devolvera siempre true.
+ * Una duda es si deberia ser valido que una materia tenga por ejemplo 2 secciones
+ * a la misma hora,de la forma como esta actualmente, si ocurre dicho caso devuelve false
+ * @param  Integer $codigo               	Codigo de la materia
+ * @param  Integer $idSemestre           	Id del semestre
+ * @param  Integer $idHoraInicio         	Id de la hora de inicio
+ * @param  Integer $idHoraFin            	Id de la hora de fin
+ * @param  Integer $idDia                	Id del dia
+ * @param  Object $objHorarioProfesores 	Objeto para acceder a la clase
+ * @return Boolean                       	True en caso de no existir choque de semestre
  */
 function validateChoqueSemestre($codigo,$idSemestre,$idHoraInicio,$idHoraFin,$idDia,$objHorarioProfesores){
+	if ($idSemestre > 9) {
+		return true;
+	}
 	$arrayRegistros = $objHorarioProfesores->getHorarioProfesoresBySemestreDia($idSemestre,$idDia);
 	if (count($arrayRegistros)==0) {
 		return true;
@@ -214,44 +244,16 @@ function validateChoqueSemestre($codigo,$idSemestre,$idHoraInicio,$idHoraFin,$id
 		}
 	}
 	return true;
-	//Tambien ve si ya existe la materia en el mismo dia y a la misma hora, esto no se si deba ser un choque
-	//puesto que normalmente suelen haber 2 secciones a la misma hora pero en diferentes aulas
-	/*
-	$arrayRegistrosA = $objHorarioProfesores->getHorarioProfesoresBySemestreDia($idSemestre,$idDia);
-	$arrayRegistrosB = $objHorarioProfesores->getHorarioProfesoresByCodigoDia($codigo,$idDia);
-	if ( (count($arrayRegistrosA)==0) && (count($arrayRegistrosB)==0) ) {
-		return true;
-	}else if (count($arrayRegistrosA)==0) {
-		foreach ($arrayRegistrosA as $key) {
-			$idHoraInicioDB= $key['id_hora_inicio'];
-			$idHoraFinDB= $key['id_hora_fin'];
-			$result = validateHoras($idHoraInicioDB,$idHoraFinDB,$idHoraInicio,$idHoraFin);
-			if (!$result) {
-				return false;
-			}
-		}
-	}else{
-		foreach ($arrayRegistrosB as $key) {
-			$idHoraInicioDB= $key['id_hora_inicio'];
-			$idHoraFinDB= $key['id_hora_fin'];
-			$result = validateHoras($idHoraInicioDB,$idHoraFinDB,$idHoraInicio,$idHoraFin);
-			if (!$result) {
-				return false;
-			}
-		}
-	}
-	return true;
-	*/
 }
 
 /**
  * Esta funcion valida que el mismo profesor no puede dar varias clases al mismo tiempo
- * @param  [Integer] $cedula               	[Cedula del profesor]
- * @param  [Integer] $idHoraInicio         	[Id de la hora de inicio]
- * @param  [Integer] $idHoraFin            	[Id de la hora de fin]
- * @param  [Integer] $idDia                	[Id del dia]
- * @param  [Object] $objHorarioProfesores 	[Objeto para acceder a la clase]
- * @return [Boolean]                       	[True en caso de no existir choques]
+ * @param  Integer $cedula               	Cedula del profesor
+ * @param  Integer $idHoraInicio         	Id de la hora de inicio
+ * @param  Integer $idHoraFin            	Id de la hora de fin
+ * @param  Integer $idDia                	Id del dia
+ * @param  Object $objHorarioProfesores 	Objeto para acceder a la clase
+ * @return Boolean                       	True en caso de no existir choques
  */
 function validateChoqueHorario($cedula,$idHoraInicio,$idHoraFin,$idDia,$objHorarioProfesores){
 	$result = $objHorarioProfesores->findHorarioProfesor($cedula,$idHoraInicio,$idHoraFin,$idDia);
@@ -273,6 +275,21 @@ function validateChoqueHorario($cedula,$idHoraInicio,$idHoraFin,$idDia,$objHorar
 	return true;
 }
 
+/**
+ * Esta funcion crea el horario de una seccion a un profesor de una materia, teniendo en 
+ * cuenta la disponibilidad del profesor, para ello se pasa por 3 validaciones principales.
+ * @param  Integer $cedula                 	Cedula del profesor
+ * @param  Integer $codigo                 	Codigo de la materia
+ * @param  Integer $idSemestre             	Id del semestre
+ * @param  Integer $idTipoMateria          	Id del tipo de materia
+ * @param  Integer $horasPorSemana         	Numero de horas por semana que debe tener una materia
+ * @param  Integer $numeroSeccion          	Numero de la seccion de una materia
+ * @param  [Array] $arrayDisponibilidad    	Array que contiene la disponibilidad del profesor
+ * @param  [Array] $arrayIdDiasDisponibles 	Array con los ids de los dias disponibles del profesor
+ * @param  [Array] $arrayIdAulas           	Array con los ids de las aulas
+ * @param  Object $objHorarioProfesores   	Objeto para acceder a la clase
+ * @return Boolean                         	True en caso de haberse guardado el horario
+ */
 function createHorarioProfesor($cedula,$codigo,$idSemestre,$idTipoMateria,$horasPorSemana,$numeroSeccion,
 	$arrayDisponibilidad,$arrayIdDiasDisponibles,$arrayIdAulas,$objHorarioProfesores){
 	$horarioGenerado =[];
@@ -354,6 +371,19 @@ function createHorarioProfesor($cedula,$codigo,$idSemestre,$idTipoMateria,$horas
 	return true;	
 }
 
+/**
+ * Esta funcion crea el horario de una seccion a un profesor de una materia de forma
+ * aleatoria, para ello se pasa por 3 validaciones principales.
+ * @param  Integer $cedula               Cedula del profesor
+ * @param  Integer $codigo               Codigo de la materia
+ * @param  Integer $idSemestre           Id del semestre
+ * @param  Integer $idTipoMateria        Id del tipo de materia
+ * @param  Integer $horasPorSemana       Numero de horas por semana que debe tener una materia
+ * @param  Integer $numeroSeccion        Numero de la seccion de una materia
+ * @param  Array   $arrayIdAulas         Array que contiene la disponibilidad del profesor
+ * @param  Object  $objHorarioProfesores Objeto para acceder a la clase
+ * @return Boolean                       True en caso de haberse guardado el horario
+ */
 function createRandomHorarioProfesor($cedula,$codigo,$idSemestre,$idTipoMateria,$horasPorSemana,
 	$numeroSeccion,$arrayIdAulas,$objHorarioProfesores){
 	$horarioGenerado =[];
