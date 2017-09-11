@@ -1,7 +1,7 @@
 <?php 
-	require($_SERVER['DOCUMENT_ROOT'].'/Horarios/Model/DBConnection.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'/Horarios/Model/MateriasModel.php');	
-	require_once($_SERVER['DOCUMENT_ROOT'].'/Horarios/Model/SeccionesModel.php'); 
+	require($_SERVER['DOCUMENT_ROOT'].'/Model/DBConnection.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/Model/MateriasModel.php');	
+	require_once($_SERVER['DOCUMENT_ROOT'].'/Model/SeccionesModel.php'); 
 
 	$link = DBConnection::connection();
 	$materias = new MateriasModel($link);

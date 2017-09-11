@@ -1,6 +1,6 @@
 <?php
-	require($_SERVER['DOCUMENT_ROOT'].'/Horarios/Model/DBConnection.php'); 
-	require_once($_SERVER['DOCUMENT_ROOT'].'/Horarios/Model/LoginModel.php');
+	require($_SERVER['DOCUMENT_ROOT'].'/Model/DBConnection.php'); 
+	require_once($_SERVER['DOCUMENT_ROOT'].'/Model/LoginModel.php');
 	
 	if ( (isset($_POST['username'])) && (isset($_POST['password'])) ) {
 		$username=trim($_POST['username']);
