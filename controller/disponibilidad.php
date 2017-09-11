@@ -1,7 +1,7 @@
 <?php
-require($_SERVER['DOCUMENT_ROOT'].'/Horarios/Model/DBConnection.php');
-require_once($_SERVER['DOCUMENT_ROOT'].'/Horarios/Model/ProfesoresModel.php'); 
-require_once($_SERVER['DOCUMENT_ROOT'].'/Horarios/Model/DisponibilidadProfesoresModel.php');
+require($_SERVER['DOCUMENT_ROOT'].'/Model/DBConnection.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/Model/ProfesoresModel.php'); 
+require_once($_SERVER['DOCUMENT_ROOT'].'/Model/DisponibilidadProfesoresModel.php');
 
 $link = DBConnection::connection();
 $profesores = new ProfesoresModel($link);

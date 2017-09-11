@@ -1,9 +1,9 @@
 <?php 
-require_once($_SERVER['DOCUMENT_ROOT'].'/Horarios/Model/AulasModel.php');
-require_once($_SERVER['DOCUMENT_ROOT'].'/Horarios/Model/MateriasModel.php');
-require_once($_SERVER['DOCUMENT_ROOT'].'/Horarios/Model/ProfesoresModel.php');
-require_once($_SERVER['DOCUMENT_ROOT'].'/Horarios/Model/ProfesoresMateriasModel.php');
-require($_SERVER['DOCUMENT_ROOT'].'/Horarios/Model/DBConnection.php');		
+require_once($_SERVER['DOCUMENT_ROOT'].'/Model/AulasModel.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/Model/MateriasModel.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/Model/ProfesoresModel.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/Model/ProfesoresMateriasModel.php');
+require($_SERVER['DOCUMENT_ROOT'].'/Model/DBConnection.php');		
 
 $link = DBConnection::connection();
 

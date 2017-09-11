@@ -1,7 +1,7 @@
 <?php  
-	require($_SERVER['DOCUMENT_ROOT'].'/Horarios/Model/DBConnection.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'/Horarios/Model/PHPExcel.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'/Horarios/Model/HomeModel.php');
+	require($_SERVER['DOCUMENT_ROOT'].'/Model/DBConnection.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/Model/PHPExcel.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/Model/HomeModel.php');
 	$link = DBConnection::connection();
 
 	$objPHPExcel = new PHPExcel();

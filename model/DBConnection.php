@@ -3,7 +3,7 @@
  * Esta clase se encarga de realizar la conexion con la DB y retorna
  *un link a ella
  */
-require_once($_SERVER['DOCUMENT_ROOT'].'/Horarios/Model/DBConfig.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/Model/DBConfig.php');
 
 class DBConnection {
 	public static function connection() {
